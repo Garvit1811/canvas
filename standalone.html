@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canada Evictions Map — Standalone Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 p-6">
+    <div class="max-w-6xl mx-auto">
+      <header class="mb-4">
+        <h1 class="text-3xl font-semibold">Canada Eviction Processes — Standalone Map</h1>
+        <p class="text-sm text-slate-600">Click a province/territory to see summary info. Data is draft/business-case level only.</p>
+      </header>
+
+      <div class="grid md:grid-cols-[2fr_1fr] gap-6">
+        <div class="bg-white rounded-2xl p-4 border border-neutral-200 shadow-sm">
+          <div id="map" class="map-container w-full h-[560px]"></div>
+          <div id="legend" class="mt-3 text-sm text-neutral-700"></div>
+        </div>
+
+        <aside class="space-y-3">
+          <div class="bg-white rounded-xl border p-3">
+            <input id="search" class="w-full border px-3 py-2 rounded-2xl" placeholder="Search by province or tribunal" />
+          </div>
+          <div id="list" class="space-y-2"></div>
+        </aside>
+      </div>
+
+      <!-- Details drawer -->
+      <div id="details" class="fixed right-6 bottom-6 max-w-md w-full hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 border">
+          <button id="closeDetails" class="text-sm text-slate-500 mb-2">Close</button>
+          <div id="detailsContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ---- Data (copied from your component, trimmed to essential fields) ----
+      const REGION_DATA = [
+  {
+    id: "BC",
+    name: "British Columbia",
+    tribunal: "BC Residential Tenancy Branch (RTB)",
+    avgTimelineDays: 45,
+    links: [ { label: "RTB – Eviction Notices", url: "https://www2.gov.bc.ca/gov/content/housing-tenancy/residential-tenancies/evictions" } ],
+    steps: ["Serve notice","Dispute filed","Hearing","Order/enforcement"]
+  },
+  {
+    id: "AB",
+    name: "Alberta",
+    tribunal: "Residential Tenancy Dispute Resolution Service (RTDRS) / Court",
+    avgTimelineDays: 35,
+    links: [ { label: "RTDRS – File a Claim", url: "https://www.alberta.ca/residential-tenancy-dispute-resolution-service" } ],
+    steps: ["Serve notice","File with RTDRS","Hearing","Enforcement"]
+  },
+  {
+    id: "SK",
+    name: "Saskatchewan",
+    tribunal: "Office of Residential Tenancies (ORT)",
+    avgTimelineDays: 30,
+    links: [ { label: "ORT – Applications", url: "https://saskatchewan.ca/ORT" } ],
+    steps: ["Serve notice","Apply to ORT","Hearing","Enforcement"]
+  },
+  {
+    id: "MB",
+    name: "Manitoba",
+    tribunal: "Residential Tenancies Branch / Commission",
+    avgTimelineDays: 40,
+    links: [ { label: "Manitoba RTB", url: "https://www.gov.mb.ca/cca/rtb/" } ],
+    steps: ["Serve notice","Apply to Branch","Hearing","Enforcement"]
+  },
+  {
+    id: "ON",
+    name: "Ontario",
+    tribunal: "Landlord and Tenant Board (LTB)",
+    avgTimelineDays: 90,
+    links: [ { label: "LTB – Forms & Guides", url: "https://tribunalsontario.ca/ltb/" } ],
+    steps: ["Serve N-form","File application","Hearing","Sheriff enforcement"]
+  },
+  {
+    id: "QC",
+    name: "Québec",
+    tribunal: "Tribunal administratif du logement (TAL)",
+    avgTimelineDays: 60,
+    links: [ { label: "TAL – Tenants & Lessors", url: "https://www.tal.gouv.qc.ca/" } ],
+    steps: ["Serve notice","File application","Hearing","Bailiff enforcement"]
+  },
+  {
+    id: "NB",
+    name: "New Brunswick",
+    tribunal: "Residential Tenancies Tribunal (Service NB)",
+    avgTimelineDays: 28,
+    links: [ { label: "Service NB – Rentals", url: "https://www2.snb.ca/" } ],
+    steps: ["Serve notice","Apply to Tribunal","Hearing","Enforcement"]
+  },
+  {
+    id: "NS",
+    name: "Nova Scotia",
+    tribunal: "Residential Tenancies Program (NS)",
+    avgTimelineDays: 35,
+    links: [ { label: "NS – Residential Tenancies", url: "https://novascotia.ca/sns/access/land/residential-tenancies.asp" } ],
+    steps: ["Serve notice","Apply for hearing","Hearing","Enforcement"]
+  },
+  {
+    id: "PE",
+    name: "Prince Edward Island",
+    tribunal: "Island Regulatory & Appeals Commission (IRAC) – Rentals",
+    avgTimelineDays: 25,
+    links: [ { label: "IRAC – Rentals", url: "https://www.irac.pe.ca/rental-appeal-board" } ],
+    steps: ["Serve notice","Apply to IRAC","Hearing","Enforcement"]
+  },
+  {
+    id: "NL",
+    name: "Newfoundland and Labrador",
+    tribunal: "Residential Tenancies – Service NL",
+    avgTimelineDays: 32,
+    links: [ { label: "Service NL – Residential Tenancies", url: "https://www.gov.nl.ca/dgsnl/residential-tenancies/" } ],
+    steps: ["Serve notice","Apply to Director","Hearing","Enforcement"]
+  },
+  {
+    id: "YT",
+    name: "Yukon",
+    tribunal: "Residential Tenancies Office (RTO)",
+    avgTimelineDays: 27,
+    links: [ { label: "Yukon RTO", url: "https://yukon.ca/en/housing-and-property/residential-tenancy" } ],
+    steps: ["Serve notice","Apply to RTO","Hearing","Enforcement"]
+  },
+  {
+    id: "NT",
+    name: "Northwest Territories",
+    tribunal: "Rental Office / Supreme Court of NWT",
+    avgTimelineDays: 34,
+    links: [ { label: "NWT – Rental Office", url: "https://www.justice.gov.nt.ca/en/rental-office/" } ],
+    steps: ["Serve notice","Apply to Rental Officer","Hearing","Enforcement"]
+  },
+  {
+    id: "NU",
+    name: "Nunavut",
+    tribunal: "Rental Officer (Justice)",
+    avgTimelineDays: 36,
+    links: [ { label: "Nunavut – Residential Tenancies", url: "https://www.gov.nu.ca/justice/information/residential-tenancies" } ],
+    steps: ["Serve notice","Apply to Rental Officer","Hearing","Enforcement"]
+  }
+];
+
+      const NAME_TO_ID = {
+        "British Columbia": "BC",
+        "Alberta": "AB",
+        "Saskatchewan": "SK",
+        "Manitoba": "MB",
+        "Ontario": "ON",
+        "Quebec": "QC",
+        "Québec": "QC",
+        "New Brunswick": "NB",
+        "Nova Scotia": "NS",
+        "Prince Edward Island": "PE",
+        "Newfoundland and Labrador": "NL",
+        "Yukon": "YT",
+        "Northwest Territories": "NT",
+        "Nunavut": "NU",
+      };
+
+      const FALLBACK_GEO_URL = 'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/canada.geojson';
+
+      function colorForValue(v){
+        if (v == null) return '#e5e7eb';
+        if (v < 30) return '#86efac';
+        if (v < 45) return '#fde68a';
+        if (v < 60) return '#fdba74';
+        return '#fca5a5';
+      }
+
+      // Create SVG and projection
+      const width = 900, height = 560;
+      const svg = d3.select('#map').append('svg').attr('width', '100%').attr('height', height).attr('viewBox', `0 0 ${width} ${height}`);
+      const g = svg.append('g');
+
+      const projection = d3.geoEqualEarth().translate([width/2, height/2]).scale(450);
+      const path = d3.geoPath().projection(projection);
+
+      // Tooltip
+      const tooltip = d3.select('body').append('div').style('position','absolute').style('pointer-events','none').style('background','white').style('border','1px solid #e5e7eb').style('padding','6px').style('border-radius','6px').style('display','none').style('font-size','13px');
+
+      function renderGeo(geojson){
+        g.selectAll('path').data(geojson.features).join('path')
+          .attr('d', path)
+          .attr('fill', d => {
+            const name = d.properties.name || d.properties.NAME || d.properties.PRNAME;
+            const id = NAME_TO_ID[name];
+            const region = REGION_DATA.find(r => r.id === id);
+            return colorForValue(region ? region.avgTimelineDays : null);
+          })
+          .attr('stroke', '#ffffff')
+          .attr('stroke-width', 1)
+          .attr('cursor', d => (NAME_TO_ID[d.properties.name] ? 'pointer' : 'default'))
+          .on('click', (event, d) => {
+            const name = d.properties.name || d.properties.NAME || d.properties.PRNAME;
+            const id = NAME_TO_ID[name];
+            const region = REGION_DATA.find(r => r.id === id);
+            showDetails(region || { name, links: [], tribunal: 'N/A', steps: [] });
+          })
+          .on('mousemove', (event, d) => {
+            const name = d.properties.name || d.properties.NAME || d.properties.PRNAME;
+            const id = NAME_TO_ID[name];
+            const region = REGION_DATA.find(r => r.id === id);
+            tooltip.style('display','block').html(`<strong>${name}</strong><div class='text-xs'>${region ? region.tribunal : ''}</div>`).style('left', (event.pageX + 10) + 'px').style('top', (event.pageY + 10) + 'px');
+          })
+          .on('mouseleave', ()=> tooltip.style('display','none'));
+
+        // Fit projection to geojson bounds
+        const b = path.bounds(geojson);
+        const s = 0.95 / Math.max((b[1][0]-b[0][0]) / width, (b[1][1]-b[0][1]) / height);
+        const t = [(width - s*(b[1][0]+b[0][0]))/2, (height - s*(b[1][1]+b[0][1]))/2];
+        projection.scale(projection.scale()*s).translate(t);
+        g.selectAll('path').attr('d', path);
+      }
+
+      function showDetails(region){
+        const details = document.getElementById('details');
+        const content = document.getElementById('detailsContent');
+        content.innerHTML = '';
+        if (!region) return;
+        const title = document.createElement('h3'); title.className='text-xl font-semibold'; title.textContent = region.name; content.appendChild(title);
+        const trib = document.createElement('div'); trib.className='text-sm text-slate-700 mt-1'; trib.textContent = region.tribunal || '' ; content.appendChild(trib);
+        if (region.steps){
+          const st = document.createElement('div'); st.className='mt-3'; st.innerHTML = '<div class="font-medium">Steps</div>';
+          const ol = document.createElement('ol'); ol.className='list-decimal pl-5';
+          region.steps.forEach(s => { const li = document.createElement('li'); li.className='text-sm'; li.textContent = s; ol.appendChild(li); });
+          st.appendChild(ol); content.appendChild(st);
+        }
+        if (region.links){
+          const resources = document.createElement('div'); resources.className='mt-3'; resources.innerHTML = '<div class="font-medium">Resources</div>';
+          const ul = document.createElement('ul'); region.links.forEach(l => { const li = document.createElement('li'); li.innerHTML = `<a class='text-blue-600 underline' href='${l.url}' target='_blank' rel='noreferrer'>${l.label}</a>`; ul.appendChild(li); });
+          resources.appendChild(ul); content.appendChild(resources);
+        }
+        details.classList.remove('hidden');
+      }
+
+      document.getElementById('closeDetails').addEventListener('click', ()=> document.getElementById('details').classList.add('hidden'));
+
+      // Build side list and search
+      const listEl = document.getElementById('list');
+      function renderList(filter=''){
+        listEl.innerHTML = '';
+        const f = filter.toLowerCase();
+        REGION_DATA.filter(r => r.name.toLowerCase().includes(f) || (r.tribunal && r.tribunal.toLowerCase().includes(f))).forEach(r => {
+          const btn = document.createElement('button'); btn.className='w-full text-left p-3 border rounded bg-white'; btn.onclick = ()=> showDetails(r);
+          btn.innerHTML = `<div class='font-medium'>${r.name}</div><div class='text-sm text-slate-600'>${r.tribunal}</div>`;
+          listEl.appendChild(btn);
+        });
+      }
+      document.getElementById('search').addEventListener('input', (e)=> renderList(e.target.value));
+      renderList();
+
+      // Legend
+      const legend = document.getElementById('legend');
+      legend.innerHTML = `
+        <span class='inline-flex items-center gap-2 mr-3'><span style='background:#86efac' class='inline-block w-4 h-4 rounded'></span>&lt; 30 days</span>
+        <span class='inline-flex items-center gap-2 mr-3'><span style='background:#fde68a' class='inline-block w-4 h-4 rounded'></span>30–44</span>
+        <span class='inline-flex items-center gap-2 mr-3'><span style='background:#fdba74' class='inline-block w-4 h-4 rounded'></span>45–59</span>
+        <span class='inline-flex items-center gap-2 mr-3'><span style='background:#fca5a5' class='inline-block w-4 h-4 rounded'></span>60+</span>
+      `;
+
+      // Fetch GeoJSON and render
+      fetch(FALLBACK_GEO_URL).then(r=>r.json()).then(geojson=>{
+        // Some geojson files have nested features or different property names; normalize name
+        geojson.features.forEach(f => {
+          f.properties.name = f.properties.name || f.properties.NAME || (f.properties.PRNAME ? String(f.properties.PRNAME).split('/') [0].trim() : f.id);
+        });
+        renderGeo(geojson);
+      }).catch(err => {
+        console.error('GeoJSON load failed', err);
+        d3.select('#map').append('div').text('Failed to load map data. Check network or use the dev preview.');
+      });
+
+      // Simple zoom behavior
+      svg.call(d3.zoom().on('zoom', (event)=> g.attr('transform', event.transform))).on('dblclick.zoom', null);
+
+    </script>
+  </body>
+</html>
