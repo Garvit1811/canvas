@@ -22,3 +22,8 @@ Thumbs.db
 .env
 .env.local
 .env.production
+
+
+# Source data files (Excel/PDF originals in root)
+/*.xlsx
+/*.pdf
