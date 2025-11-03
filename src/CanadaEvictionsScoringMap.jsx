@@ -19,9 +19,8 @@ import {
  * Interactive map showing provincial scores across 10 key eviction indicators
  */
 
-// Map data
-const STATS_CAN_URL = "https://raw.githubusercontent.com/StatCan/geojson/master/2021/province/limits-prov_000b21a_e.json";
-const FALLBACK_GEO_URL = "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/canada.geojson";
+// Map data - using local GeoJSON file for reliability
+const GEO_URL = "/canada.geojson";
 
 const NAME_TO_ID = {
   "British Columbia": "BC",
@@ -63,7 +62,6 @@ export default function CanadaEvictionsScoringMap() {
   const [selectedIndicator, setSelectedIndicator] = useState(INDICATORS[0]);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [geoSource, setGeoSource] = useState(STATS_CAN_URL);
   const [center, setCenter] = useState([-96, 61]);
   const [zoom, setZoom] = useState(1);
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
@@ -79,13 +77,6 @@ export default function CanadaEvictionsScoringMap() {
     setDialogOpen(true);
     setProvinceDropdownOpen(false);
   };
-
-  // Try fetching StatsCan data, fallback if needed
-  React.useEffect(() => {
-    fetch(STATS_CAN_URL, { method: 'HEAD' })
-      .then((r) => { if (!r.ok) throw new Error('not ok'); })
-      .catch(() => setGeoSource(FALLBACK_GEO_URL));
-  }, []);
 
   const zoomIn = () => setZoom((z) => Math.min(z * 1.4, 8));
   const zoomOut = () => setZoom((z) => Math.max(z / 1.4, 0.6));
@@ -221,7 +212,7 @@ export default function CanadaEvictionsScoringMap() {
                       className="w-full h-full"
                     >
                       <ZoomableGroup center={center} zoom={zoom} onMoveEnd={({ coordinates, zoom }) => { setCenter(coordinates); setZoom(zoom); }}>
-                        <Geographies geography={geoSource}>
+                        <Geographies geography={GEO_URL}>
                           {({ geographies }) => (
                             <>
                               {geographies.map((geo) => {
