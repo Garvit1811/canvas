@@ -13,12 +13,14 @@ import {
   getScoreColor,
   SCORE_DESCRIPTIONS
 } from "./data/indicatorScores";
-import canadaGeoJSON from "../public/canada.geojson";
 
 /**
  * Canada Eviction Scoring Map
  * Interactive map showing provincial scores across 10 key eviction indicators
  */
+
+// Use external GeoJSON URL (same as standalone.html) - most reliable for production
+const GEO_URL = "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/canada.geojson";
 
 const NAME_TO_ID = {
   "British Columbia": "BC",
@@ -210,7 +212,7 @@ export default function CanadaEvictionsScoringMap() {
                       className="w-full h-full"
                     >
                       <ZoomableGroup center={center} zoom={zoom} onMoveEnd={({ coordinates, zoom }) => { setCenter(coordinates); setZoom(zoom); }}>
-                        <Geographies geography={canadaGeoJSON}>
+                        <Geographies geography={GEO_URL}>
                           {({ geographies }) => (
                             <>
                               {geographies.map((geo) => {
