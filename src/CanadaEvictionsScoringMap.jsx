@@ -118,63 +118,7 @@ export default function CanadaEvictionsScoringMap() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
-          {/* Left Sidebar - Indicator Selector */}
-          <div className="space-y-4">
-            <Card className="p-4">
-              <h2 className="font-semibold mb-3 text-lg">Select Indicator</h2>
-              <div className="space-y-2">
-                {INDICATORS.map((indicator) => (
-                  <button
-                    key={indicator.id}
-                    onClick={() => setSelectedIndicator(indicator)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition text-sm font-medium ${
-                      selectedIndicator.id === indicator.id
-                        ? "bg-blue-600 text-white shadow-md"
-                        : "bg-white border border-neutral-200 hover:bg-neutral-50"
-                    }`}
-                  >
-                    {indicator.shortName}
-                  </button>
-                ))}
-              </div>
-            </Card>
-
-            {/* Province Quick Navigation */}
-            <Card className="p-4">
-              <h2 className="font-semibold mb-3 text-lg">Jump to Province</h2>
-              <div className="relative">
-                <button
-                  onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
-                  className="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg text-left flex items-center justify-between hover:bg-neutral-50"
-                >
-                  <span className="text-sm">Select province...</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-
-                {provinceDropdownOpen && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-                    {provinceList.map((prov) => (
-                      <button
-                        key={prov.id}
-                        onClick={() => onSelectProvince(prov.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 flex items-center justify-between"
-                      >
-                        <span>{prov.name}</span>
-                        <span
-                          className="px-2 py-1 rounded text-xs font-semibold text-white"
-                          style={{ backgroundColor: getScoreColor(prov.score) }}
-                        >
-                          {prov.score}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Card>
-          </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
           {/* Main Content - Map and Info */}
           <div className="space-y-6">
             {/* Current Indicator Info */}
@@ -276,6 +220,62 @@ export default function CanadaEvictionsScoringMap() {
                   </div>
                 </div>
               </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Sidebar - Indicator Selector */}
+          <div className="space-y-4">
+            <Card className="p-4">
+              <h2 className="font-semibold mb-3 text-lg">Select Indicator</h2>
+              <div className="space-y-2">
+                {INDICATORS.map((indicator) => (
+                  <button
+                    key={indicator.id}
+                    onClick={() => setSelectedIndicator(indicator)}
+                    className={`w-full text-left px-4 py-3 rounded-lg transition text-sm font-medium ${
+                      selectedIndicator.id === indicator.id
+                        ? "bg-blue-600 text-white shadow-md"
+                        : "bg-white border border-neutral-200 hover:bg-neutral-50"
+                    }`}
+                  >
+                    {indicator.shortName}
+                  </button>
+                ))}
+              </div>
+            </Card>
+
+            {/* Province Quick Navigation */}
+            <Card className="p-4">
+              <h2 className="font-semibold mb-3 text-lg">Jump to Province</h2>
+              <div className="relative">
+                <button
+                  onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
+                  className="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg text-left flex items-center justify-between hover:bg-neutral-50"
+                >
+                  <span className="text-sm">Select province...</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+
+                {provinceDropdownOpen && (
+                  <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
+                    {provinceList.map((prov) => (
+                      <button
+                        key={prov.id}
+                        onClick={() => onSelectProvince(prov.id)}
+                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 flex items-center justify-between"
+                      >
+                        <span>{prov.name}</span>
+                        <span
+                          className="px-2 py-1 rounded text-xs font-semibold text-white"
+                          style={{ backgroundColor: getScoreColor(prov.score) }}
+                        >
+                          {prov.score}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>
