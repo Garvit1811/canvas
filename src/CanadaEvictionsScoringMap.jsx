@@ -226,28 +226,26 @@ export default function CanadaEvictionsScoringMap() {
                     </ComposableMap>
                   </div>
 
-                </div>
-
-                {/* Legend */}
-                <div className="mt-6 pt-6 border-t border-slate-200">
-                  <div className="flex items-start gap-4">
-                    <span className="text-sm font-semibold text-slate-700 pt-1.5">Score Legend:</span>
-                    <div className="flex flex-wrap gap-4">
-                      {[1, 2, 3, 4, 5].map(score => (
-                        <div key={score} className="inline-flex items-center gap-2.5 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                          <span
-                            className="inline-block w-6 h-6 rounded-md shadow-sm border border-white/50"
-                            style={{ backgroundColor: getScoreColor(score) }}
-                          ></span>
-                          <div className="flex items-baseline gap-1.5">
-                            <span className="font-bold text-slate-900">{score}</span>
-                            <span className="text-slate-600 text-sm">— {SCORE_DESCRIPTIONS[score]}</span>
+                  {/* Legend */}
+                  <div className="mt-6 pt-6 border-t border-slate-200">
+                    <div className="flex items-start gap-4">
+                      <span className="text-sm font-semibold text-slate-700 pt-1.5">Score Legend:</span>
+                      <div className="flex flex-wrap gap-4">
+                        {[1, 2, 3, 4, 5].map(score => (
+                          <div key={score} className="inline-flex items-center gap-2.5 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                            <span
+                              className="inline-block w-6 h-6 rounded-md shadow-sm border border-white/50"
+                              style={{ backgroundColor: getScoreColor(score) }}
+                            ></span>
+                            <div className="flex items-baseline gap-1.5">
+                              <span className="font-bold text-slate-900">{score}</span>
+                              <span className="text-slate-600 text-sm">— {SCORE_DESCRIPTIONS[score]}</span>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
