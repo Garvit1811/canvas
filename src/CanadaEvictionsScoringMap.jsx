@@ -82,11 +82,14 @@ export default function CanadaEvictionsScoringMap() {
   const zoomOut = () => setZoom((z) => Math.max(z / 1.4, 0.6));
   const resetView = () => { setCenter([-96, 61]); setZoom(1); };
 
-  const provinceList = Object.entries(PROVINCE_NAMES).map(([id, name]) => ({
-    id,
-    name,
-    score: getRegionScore(id)
-  })).sort((a, b) => a.name.localeCompare(b.name));
+  const provinceList = Object.entries(PROVINCE_NAMES)
+    .filter(([id]) => !['YT', 'NT', 'NU'].includes(id)) // Exclude territories
+    .map(([id, name]) => ({
+      id,
+      name,
+      score: getRegionScore(id)
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="w-full min-h-screen p-6 bg-neutral-50 text-neutral-900">
