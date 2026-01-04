@@ -136,7 +136,47 @@ export default function CanadaEvictionsScoringMap() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6">
+          {/* Left Sidebar - Indicator Selector */}
+          <div className="space-y-5">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
+              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
+                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+                Select Indicator
+              </h2>
+              <div className="space-y-2">
+                {INDICATORS.map((indicator) => (
+                  <button
+                    key={indicator.id}
+                    onClick={() => setSelectedIndicator(indicator)}
+                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
+                      selectedIndicator.id === indicator.id
+                        ? "text-white shadow-md scale-[1.02]"
+                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-sm text-slate-700"
+                    }`}
+                    style={
+                      selectedIndicator.id === indicator.id
+                        ? { background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)', boxShadow: '0 4px 6px -1px rgba(196, 160, 6, 0.2)' }
+                        : {}
+                    }
+                    onMouseEnter={(e) => {
+                      if (selectedIndicator.id !== indicator.id) {
+                        e.currentTarget.style.borderColor = '#c4a006';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedIndicator.id !== indicator.id) {
+                        e.currentTarget.style.borderColor = '#e2e8f0';
+                      }
+                    }}
+                  >
+                    {indicator.shortName}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Main Content - Map and Info */}
           <div className="space-y-6">
             {/* Current Indicator Info */}
@@ -288,45 +328,8 @@ export default function CanadaEvictionsScoringMap() {
             </div>
           </div>
 
-          {/* Right Sidebar - Indicator Selector */}
+          {/* Right Sidebar - Province Navigation */}
           <div className="space-y-5">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
-                Select Indicator
-              </h2>
-              <div className="space-y-2">
-                {INDICATORS.map((indicator) => (
-                  <button
-                    key={indicator.id}
-                    onClick={() => setSelectedIndicator(indicator)}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
-                      selectedIndicator.id === indicator.id
-                        ? "text-white shadow-md scale-[1.02]"
-                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-sm text-slate-700"
-                    }`}
-                    style={
-                      selectedIndicator.id === indicator.id
-                        ? { background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)', boxShadow: '0 4px 6px -1px rgba(196, 160, 6, 0.2)' }
-                        : {}
-                    }
-                    onMouseEnter={(e) => {
-                      if (selectedIndicator.id !== indicator.id) {
-                        e.currentTarget.style.borderColor = '#c4a006';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (selectedIndicator.id !== indicator.id) {
-                        e.currentTarget.style.borderColor = '#e2e8f0';
-                      }
-                    }}
-                  >
-                    {indicator.shortName}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Province Quick Navigation */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
               <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
