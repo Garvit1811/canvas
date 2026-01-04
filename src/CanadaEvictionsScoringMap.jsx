@@ -92,30 +92,34 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen p-6 bg-neutral-50 text-neutral-900">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <header className="mb-6">
-          <h1 className="text-4xl font-bold mb-2">Canada Eviction Law Comparison</h1>
-          <p className="text-lg text-neutral-600 mb-4">
-            Compare provincial eviction laws across 10 key indicators. Each province is scored 1-5,
-            with higher scores indicating stronger tenant protections.
-          </p>
+        <header className="mb-10">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-extrabold text-slate-900 mb-3 tracking-tight">
+              Canada Eviction Law Comparison
+            </h1>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Interactive analysis of provincial eviction laws across 10 key indicators.
+              Compare tenant protections and procedural safeguards nationwide.
+            </p>
+          </div>
 
           {/* PDF Resources */}
-          <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex flex-wrap justify-center gap-3">
             {Object.entries(PDF_DOCUMENTS).map(([key, doc]) => (
               <a
                 key={key}
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-lg hover:bg-neutral-100 transition text-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 hover:shadow-md transition-all duration-200 text-sm font-medium text-slate-700 shadow-sm"
                 title={doc.description}
               >
-                <FileText className="h-4 w-4" />
+                <FileText className="h-4 w-4 text-slate-500" />
                 {doc.title}
-                <Download className="h-3 w-3" />
+                <Download className="h-3 w-3 text-slate-400" />
               </a>
             ))}
           </div>
@@ -125,30 +129,50 @@ export default function CanadaEvictionsScoringMap() {
           {/* Main Content - Map and Info */}
           <div className="space-y-6">
             {/* Current Indicator Info */}
-            <Card className="p-4 bg-blue-50 border-blue-200">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-blue-900">{selectedIndicator.name}</h2>
-                  <p className="text-sm text-blue-700 mt-1">{selectedIndicator.description}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-blue-600 font-medium">Current Indicator</div>
-                  <div className="text-2xl font-bold text-blue-900">{selectedIndicator.shortName}</div>
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50"></div>
+              <div className="relative p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="text-xs uppercase tracking-wider text-blue-200 font-semibold mb-2">
+                      Current Indicator
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
+                    <p className="text-sm text-blue-100 leading-relaxed">{selectedIndicator.description}</p>
+                  </div>
+                  <div className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
+                    <div className="text-xs text-blue-100 font-medium mb-1 text-center">Score Scale</div>
+                    <div className="text-3xl font-bold text-white text-center">1-5</div>
+                  </div>
                 </div>
               </div>
-            </Card>
+            </div>
 
             {/* Map */}
-            <Card className="p-4">
-              <CardContent className="p-0">
-                <div className="bg-white rounded-2xl p-4 border border-neutral-200">
-                  <div className="w-full h-[560px] relative">
-                    {/* Zoom Controls */}
-                    <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
-                      <Button size="icon" variant="secondary" className="rounded-full shadow" onClick={zoomIn}>+</Button>
-                      <Button size="icon" variant="secondary" className="rounded-full shadow" onClick={zoomOut}>−</Button>
-                      <Button size="sm" variant="outline" className="rounded-full shadow" onClick={resetView}>Reset</Button>
-                    </div>
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
+              <div className="p-6">
+                <div className="w-full h-[560px] relative bg-slate-50/50 rounded-xl overflow-hidden">
+                  {/* Zoom Controls */}
+                  <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
+                    <button
+                      onClick={zoomIn}
+                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200 font-bold text-xl"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={zoomOut}
+                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200 font-bold text-xl"
+                    >
+                      −
+                    </button>
+                    <button
+                      onClick={resetView}
+                      className="px-3 py-2 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200"
+                    >
+                      Reset
+                    </button>
+                  </div>
 
                     <ComposableMap
                       projection="geoEqualEarth"
@@ -203,99 +227,110 @@ export default function CanadaEvictionsScoringMap() {
                     </ComposableMap>
                   </div>
 
-                  {/* Legend */}
-                  <div className="mt-4 pt-4 border-t border-neutral-200">
-                    <div className="flex items-center justify-between flex-wrap gap-3">
-                      <span className="text-sm font-medium text-neutral-700">Score:</span>
-                      <div className="flex flex-wrap gap-3 text-sm">
-                        {[1, 2, 3, 4, 5].map(score => (
-                          <span key={score} className="inline-flex items-center gap-2">
-                            <span
-                              className="inline-block w-5 h-5 rounded"
-                              style={{ backgroundColor: getScoreColor(score) }}
-                            ></span>
-                            <span className="font-medium">{score}</span>
-                            <span className="text-neutral-600">- {SCORE_DESCRIPTIONS[score]}</span>
-                          </span>
-                        ))}
-                      </div>
+                </div>
+
+                {/* Legend */}
+                <div className="mt-6 pt-6 border-t border-slate-200">
+                  <div className="flex items-start gap-4">
+                    <span className="text-sm font-semibold text-slate-700 pt-1.5">Score Legend:</span>
+                    <div className="flex flex-wrap gap-4">
+                      {[1, 2, 3, 4, 5].map(score => (
+                        <div key={score} className="inline-flex items-center gap-2.5 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+                          <span
+                            className="inline-block w-6 h-6 rounded-md shadow-sm border border-white/50"
+                            style={{ backgroundColor: getScoreColor(score) }}
+                          ></span>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="font-bold text-slate-900">{score}</span>
+                            <span className="text-slate-600 text-sm">— {SCORE_DESCRIPTIONS[score]}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Right Sidebar - Indicator Selector */}
-          <div className="space-y-4">
-            <Card className="p-4">
-              <h2 className="font-semibold mb-3 text-lg">Select Indicator</h2>
+          <div className="space-y-5">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
+              <h2 className="font-bold mb-4 text-lg text-slate-900 flex items-center gap-2">
+                <div className="w-1 h-5 bg-blue-600 rounded-full"></div>
+                Select Indicator
+              </h2>
               <div className="space-y-2">
                 {INDICATORS.map((indicator) => (
                   <button
                     key={indicator.id}
                     onClick={() => setSelectedIndicator(indicator)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition text-sm font-medium ${
+                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
                       selectedIndicator.id === indicator.id
-                        ? "bg-blue-600 text-white shadow-md"
-                        : "bg-white border border-neutral-200 hover:bg-neutral-50"
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-200 scale-[1.02]"
+                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:border-blue-200 hover:shadow-sm text-slate-700"
                     }`}
                   >
                     {indicator.shortName}
                   </button>
                 ))}
               </div>
-            </Card>
+            </div>
 
             {/* Province Quick Navigation */}
-            <Card className="p-4">
-              <h2 className="font-semibold mb-3 text-lg">Jump to Province</h2>
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
+              <h2 className="font-bold mb-4 text-lg text-slate-900 flex items-center gap-2">
+                <div className="w-1 h-5 bg-blue-600 rounded-full"></div>
+                Jump to Province
+              </h2>
               <div className="relative">
                 <button
                   onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
-                  className="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg text-left flex items-center justify-between hover:bg-neutral-50"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
                 >
                   <span className="text-sm">Select province...</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {provinceDropdownOpen && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-80 overflow-y-auto">
-                    {provinceList.map((prov) => (
-                      <button
-                        key={prov.id}
-                        onClick={() => onSelectProvince(prov.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 flex items-center justify-between"
-                      >
-                        <span>{prov.name}</span>
-                        <span
-                          className="px-2 py-1 rounded text-xs font-semibold text-white"
-                          style={{ backgroundColor: getScoreColor(prov.score) }}
+                  <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-hidden">
+                    <div className="max-h-80 overflow-y-auto">
+                      {provinceList.map((prov) => (
+                        <button
+                          key={prov.id}
+                          onClick={() => onSelectProvince(prov.id)}
+                          className="w-full px-4 py-3 text-left text-sm hover:bg-blue-50 flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
                         >
-                          {prov.score}
-                        </span>
-                      </button>
-                    ))}
+                          <span>{prov.name}</span>
+                          <span
+                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-white shadow-sm"
+                            style={{ backgroundColor: getScoreColor(prov.score) }}
+                          >
+                            {prov.score}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedProvince && (
-            <div className="space-y-4">
+            <div className="space-y-6">
               <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center justify-between">
+                <DialogTitle className="text-3xl font-bold flex items-center justify-between text-slate-900 pb-4 border-b border-slate-200">
                   <span>{PROVINCE_NAMES[selectedProvince]}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-normal text-neutral-600">Score:</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-medium text-slate-600">Overall Score:</span>
                     <span
-                      className="px-4 py-2 rounded-lg text-xl font-bold text-white"
+                      className="px-5 py-2.5 rounded-xl text-2xl font-bold text-white shadow-lg"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
                     >
                       {getRegionScore(selectedProvince)}
@@ -305,16 +340,16 @@ export default function CanadaEvictionsScoringMap() {
               </DialogHeader>
 
               {/* Current Indicator Score Details */}
-              <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="text-xs uppercase tracking-wide text-neutral-500 font-medium">Indicator</div>
-                    <div className="text-lg font-semibold text-neutral-900">{selectedIndicator.name}</div>
+              <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl p-5 border border-blue-100 shadow-sm">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="text-xs uppercase tracking-wider text-blue-600 font-bold mb-1.5">Current Indicator</div>
+                    <div className="text-xl font-bold text-slate-900">{selectedIndicator.name}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs uppercase tracking-wide text-neutral-500 font-medium">Score</div>
+                    <div className="text-xs uppercase tracking-wider text-blue-600 font-bold mb-1.5">Score</div>
                     <div
-                      className="text-3xl font-bold text-white px-3 py-1 rounded-lg inline-block"
+                      className="text-4xl font-bold text-white px-4 py-2 rounded-xl inline-block shadow-md"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
                     >
                       {getRegionScore(selectedProvince)}
@@ -322,9 +357,9 @@ export default function CanadaEvictionsScoringMap() {
                   </div>
                 </div>
 
-                <div className="mt-3 pt-3 border-t border-neutral-300">
-                  <div className="text-sm font-medium text-neutral-700 mb-1">Explanation:</div>
-                  <p className="text-sm text-neutral-800 leading-relaxed">
+                <div className="mt-4 pt-4 border-t border-blue-200/50">
+                  <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
+                  <p className="text-sm text-slate-700 leading-relaxed">
                     {getScoreExplanation(selectedIndicator.id, getRegionScore(selectedProvince))}
                   </p>
                 </div>
@@ -332,8 +367,8 @@ export default function CanadaEvictionsScoringMap() {
 
               {/* All Scores for This Province */}
               <div>
-                <h3 className="font-semibold text-lg mb-3">All Indicator Scores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                <h3 className="font-bold text-xl mb-4 text-slate-900">All Indicator Scores</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-1">
                   {INDICATORS.map(indicator => {
                     const score = getProvinceScore(selectedProvince, indicator.id);
                     return (
@@ -343,15 +378,15 @@ export default function CanadaEvictionsScoringMap() {
                           setSelectedIndicator(indicator);
                           setDialogOpen(false);
                         }}
-                        className="text-left p-3 rounded-lg border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 transition"
+                        className="text-left p-4 rounded-xl border-2 border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all duration-200 hover:shadow-md group"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="font-medium text-sm">{indicator.shortName}</div>
-                            <div className="text-xs text-neutral-600 mt-0.5">{indicator.description}</div>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="font-bold text-sm text-slate-900 group-hover:text-blue-700 transition-colors">{indicator.shortName}</div>
+                            <div className="text-xs text-slate-600 mt-1 line-clamp-1">{indicator.description}</div>
                           </div>
                           <div
-                            className="ml-3 px-3 py-1 rounded font-bold text-white text-lg"
+                            className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
                             style={{ backgroundColor: getScoreColor(score) }}
                           >
                             {score}
@@ -364,26 +399,25 @@ export default function CanadaEvictionsScoringMap() {
               </div>
 
               {/* Resources */}
-              <div className="pt-4 border-t border-neutral-200">
-                <h3 className="font-semibold text-sm mb-2">Resources</h3>
-                <div className="flex flex-wrap gap-2">
+              <div className="pt-5 border-t border-slate-200">
+                <h3 className="font-bold text-sm text-slate-700 mb-3 uppercase tracking-wider">Additional Resources</h3>
+                <div className="flex flex-wrap gap-3">
                   <a
                     href={PDF_DOCUMENTS.processMap.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 text-sm font-semibold text-blue-700"
                   >
-                    <FileText className="h-3 w-3" />
+                    <FileText className="h-4 w-4" />
                     Process Map
                   </a>
-                  <span className="text-neutral-300">•</span>
                   <a
                     href={PDF_DOCUMENTS.methodology.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:text-blue-800 underline inline-flex items-center gap-1"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 text-sm font-semibold text-blue-700"
                   >
-                    <FileText className="h-3 w-3" />
+                    <FileText className="h-4 w-4" />
                     Full Analysis
                   </a>
                 </div>
