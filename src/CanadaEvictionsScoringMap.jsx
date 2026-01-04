@@ -65,6 +65,7 @@ export default function CanadaEvictionsScoringMap() {
   const [center, setCenter] = useState([-96, 61]);
   const [zoom, setZoom] = useState(1);
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
+  const [indicatorDropdownOpen, setIndicatorDropdownOpen] = useState(false);
 
   // Get score for a province based on selected indicator
   const getRegionScore = (provinceId) => {
@@ -144,35 +145,60 @@ export default function CanadaEvictionsScoringMap() {
                 <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
                 Select Indicator
               </h2>
-              <div className="space-y-2">
-                {INDICATORS.map((indicator) => (
-                  <button
-                    key={indicator.id}
-                    onClick={() => setSelectedIndicator(indicator)}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
-                      selectedIndicator.id === indicator.id
-                        ? "text-white shadow-md scale-[1.02]"
-                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-sm text-slate-700"
-                    }`}
-                    style={
-                      selectedIndicator.id === indicator.id
-                        ? { background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)', boxShadow: '0 4px 6px -1px rgba(196, 160, 6, 0.2)' }
-                        : {}
-                    }
-                    onMouseEnter={(e) => {
-                      if (selectedIndicator.id !== indicator.id) {
-                        e.currentTarget.style.borderColor = '#c4a006';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (selectedIndicator.id !== indicator.id) {
-                        e.currentTarget.style.borderColor = '#e2e8f0';
-                      }
-                    }}
-                  >
-                    {indicator.shortName}
-                  </button>
-                ))}
+              <div className="relative">
+                <button
+                  onClick={() => setIndicatorDropdownOpen(!indicatorDropdownOpen)}
+                  className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
+                  style={{ borderColor: '#333f50' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#c4a006';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#333f50';
+                  }}
+                >
+                  <span className="text-sm font-semibold">{selectedIndicator.shortName}</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${indicatorDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
+                </button>
+
+                {indicatorDropdownOpen && (
+                  <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
+                    <div className="max-h-80 overflow-y-auto">
+                      {INDICATORS.map((indicator) => (
+                        <button
+                          key={indicator.id}
+                          onClick={() => {
+                            setSelectedIndicator(indicator);
+                            setIndicatorDropdownOpen(false);
+                          }}
+                          className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
+                          style={
+                            selectedIndicator.id === indicator.id
+                              ? { backgroundColor: 'rgba(51, 63, 80, 0.08)', fontWeight: '700' }
+                              : {}
+                          }
+                          onMouseEnter={(e) => {
+                            if (selectedIndicator.id !== indicator.id) {
+                              e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (selectedIndicator.id !== indicator.id) {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            } else {
+                              e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
+                            }
+                          }}
+                        >
+                          <span>{indicator.shortName}</span>
+                          {selectedIndicator.id === indicator.id && (
+                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
