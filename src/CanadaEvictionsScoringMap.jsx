@@ -92,12 +92,12 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/20 to-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <header className="mb-10">
           <div className="text-center mb-8">
-            <h1 className="text-5xl font-extrabold text-slate-900 mb-3 tracking-tight">
+            <h1 className="text-5xl font-extrabold mb-3 tracking-tight" style={{ color: '#333f50' }}>
               Canada Eviction Law Comparison
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
@@ -114,12 +114,23 @@ export default function CanadaEvictionsScoringMap() {
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 hover:shadow-md transition-all duration-200 text-sm font-medium text-slate-700 shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 rounded-xl hover:shadow-md transition-all duration-200 text-sm font-medium text-slate-700 shadow-sm"
+                style={{
+                  borderColor: '#333f50',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#333f50';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.color = '#334155';
+                }}
                 title={doc.description}
               >
-                <FileText className="h-4 w-4 text-slate-500" />
+                <FileText className="h-4 w-4" />
                 {doc.title}
-                <Download className="h-3 w-3 text-slate-400" />
+                <Download className="h-3 w-3" />
               </a>
             ))}
           </div>
@@ -129,18 +140,18 @@ export default function CanadaEvictionsScoringMap() {
           {/* Main Content - Map and Info */}
           <div className="space-y-6">
             {/* Current Indicator Info */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg">
+            <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
               <div className="p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <div className="text-xs uppercase tracking-wider text-blue-200 font-semibold mb-2">
+                    <div className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: '#c4a006' }}>
                       Current Indicator
                     </div>
                     <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
-                    <p className="text-sm text-blue-100 leading-relaxed">{selectedIndicator.description}</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
                   </div>
-                  <div className="flex-shrink-0 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20">
-                    <div className="text-xs text-blue-100 font-medium mb-1 text-center">Score Scale</div>
+                  <div className="flex-shrink-0 rounded-xl px-4 py-3 border-2" style={{ backgroundColor: 'rgba(196, 160, 6, 0.15)', borderColor: '#c4a006' }}>
+                    <div className="text-xs font-medium mb-1 text-center" style={{ color: '#c4a006' }}>Score Scale</div>
                     <div className="text-3xl font-bold text-white text-center">1-5</div>
                   </div>
                 </div>
@@ -155,19 +166,46 @@ export default function CanadaEvictionsScoringMap() {
                   <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
                     <button
                       onClick={zoomIn}
-                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200 font-bold text-xl"
+                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border-2 flex items-center justify-center text-slate-700 transition-all duration-200 font-bold text-xl"
+                      style={{ borderColor: '#333f50' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#333f50';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'white';
+                        e.currentTarget.style.color = '#334155';
+                      }}
                     >
                       +
                     </button>
                     <button
                       onClick={zoomOut}
-                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 flex items-center justify-center text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200 font-bold text-xl"
+                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border-2 flex items-center justify-center text-slate-700 transition-all duration-200 font-bold text-xl"
+                      style={{ borderColor: '#333f50' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#333f50';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'white';
+                        e.currentTarget.style.color = '#334155';
+                      }}
                     >
                       −
                     </button>
                     <button
                       onClick={resetView}
-                      className="px-3 py-2 rounded-full bg-white shadow-lg hover:shadow-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:border-blue-300 transition-all duration-200"
+                      className="px-3 py-2 rounded-full bg-white shadow-lg hover:shadow-xl border-2 text-xs font-semibold text-slate-700 transition-all duration-200"
+                      style={{ borderColor: '#333f50' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#333f50';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'white';
+                        e.currentTarget.style.color = '#334155';
+                      }}
                     >
                       Reset
                     </button>
@@ -253,8 +291,8 @@ export default function CanadaEvictionsScoringMap() {
           {/* Right Sidebar - Indicator Selector */}
           <div className="space-y-5">
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-              <h2 className="font-bold mb-4 text-lg text-slate-900 flex items-center gap-2">
-                <div className="w-1 h-5 bg-blue-600 rounded-full"></div>
+              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
+                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
                 Select Indicator
               </h2>
               <div className="space-y-2">
@@ -264,9 +302,24 @@ export default function CanadaEvictionsScoringMap() {
                     onClick={() => setSelectedIndicator(indicator)}
                     className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 text-sm font-semibold ${
                       selectedIndicator.id === indicator.id
-                        ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-200 scale-[1.02]"
-                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:border-blue-200 hover:shadow-sm text-slate-700"
+                        ? "text-white shadow-md scale-[1.02]"
+                        : "bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-sm text-slate-700"
                     }`}
+                    style={
+                      selectedIndicator.id === indicator.id
+                        ? { background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)', boxShadow: '0 4px 6px -1px rgba(196, 160, 6, 0.2)' }
+                        : {}
+                    }
+                    onMouseEnter={(e) => {
+                      if (selectedIndicator.id !== indicator.id) {
+                        e.currentTarget.style.borderColor = '#c4a006';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedIndicator.id !== indicator.id) {
+                        e.currentTarget.style.borderColor = '#e2e8f0';
+                      }
+                    }}
                   >
                     {indicator.shortName}
                   </button>
@@ -276,27 +329,40 @@ export default function CanadaEvictionsScoringMap() {
 
             {/* Province Quick Navigation */}
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-              <h2 className="font-bold mb-4 text-lg text-slate-900 flex items-center gap-2">
-                <div className="w-1 h-5 bg-blue-600 rounded-full"></div>
+              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
+                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
                 Jump to Province
               </h2>
               <div className="relative">
                 <button
                   onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:border-blue-200 hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
+                  className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
+                  style={{ borderColor: '#333f50' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#c4a006';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#333f50';
+                  }}
                 >
                   <span className="text-sm">Select province...</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
                 </button>
 
                 {provinceDropdownOpen && (
-                  <div className="absolute z-20 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-80 overflow-hidden">
+                  <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
                     <div className="max-h-80 overflow-y-auto">
                       {provinceList.map((prov) => (
                         <button
                           key={prov.id}
                           onClick={() => onSelectProvince(prov.id)}
-                          className="w-full px-4 py-3 text-left text-sm hover:bg-blue-50 flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
+                          className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          }}
                         >
                           <span>{prov.name}</span>
                           <span
@@ -322,7 +388,7 @@ export default function CanadaEvictionsScoringMap() {
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
-                <DialogTitle className="text-3xl font-bold flex items-center justify-between text-slate-900 pb-4 border-b border-slate-200">
+                <DialogTitle className="text-3xl font-bold flex items-center justify-between pb-4 border-b-2" style={{ color: '#333f50', borderColor: '#c4a006' }}>
                   <span>{PROVINCE_NAMES[selectedProvince]}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-medium text-slate-600">Overall Score:</span>
@@ -337,14 +403,14 @@ export default function CanadaEvictionsScoringMap() {
               </DialogHeader>
 
               {/* Current Indicator Score Details */}
-              <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl p-5 border border-blue-100 shadow-sm">
+              <div className="rounded-xl p-5 border-2 shadow-sm" style={{ backgroundColor: 'rgba(51, 63, 80, 0.04)', borderColor: '#333f50' }}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <div className="text-xs uppercase tracking-wider text-blue-600 font-bold mb-1.5">Current Indicator</div>
-                    <div className="text-xl font-bold text-slate-900">{selectedIndicator.name}</div>
+                    <div className="text-xs uppercase tracking-wider font-bold mb-1.5" style={{ color: '#c4a006' }}>Current Indicator</div>
+                    <div className="text-xl font-bold" style={{ color: '#333f50' }}>{selectedIndicator.name}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs uppercase tracking-wider text-blue-600 font-bold mb-1.5">Score</div>
+                    <div className="text-xs uppercase tracking-wider font-bold mb-1.5" style={{ color: '#c4a006' }}>Score</div>
                     <div
                       className="text-4xl font-bold text-white px-4 py-2 rounded-xl inline-block shadow-md"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
@@ -354,7 +420,7 @@ export default function CanadaEvictionsScoringMap() {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-blue-200/50">
+                <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
                   <p className="text-sm text-slate-700 leading-relaxed">
                     {getScoreExplanation(selectedIndicator.id, getRegionScore(selectedProvince))}
@@ -364,7 +430,7 @@ export default function CanadaEvictionsScoringMap() {
 
               {/* All Scores for This Province */}
               <div>
-                <h3 className="font-bold text-xl mb-4 text-slate-900">All Indicator Scores</h3>
+                <h3 className="font-bold text-xl mb-4" style={{ color: '#333f50' }}>All Indicator Scores</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-1">
                   {INDICATORS.map(indicator => {
                     const score = getProvinceScore(selectedProvince, indicator.id);
@@ -375,11 +441,19 @@ export default function CanadaEvictionsScoringMap() {
                           setSelectedIndicator(indicator);
                           setDialogOpen(false);
                         }}
-                        className="text-left p-4 rounded-xl border-2 border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all duration-200 hover:shadow-md group"
+                        className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = '#c4a006';
+                          e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.05)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
                       >
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm text-slate-900 group-hover:text-blue-700 transition-colors">{indicator.shortName}</div>
+                            <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
                             <div className="text-xs text-slate-600 mt-1 line-clamp-1">{indicator.description}</div>
                           </div>
                           <div
@@ -397,13 +471,22 @@ export default function CanadaEvictionsScoringMap() {
 
               {/* Resources */}
               <div className="pt-5 border-t border-slate-200">
-                <h3 className="font-bold text-sm text-slate-700 mb-3 uppercase tracking-wider">Additional Resources</h3>
+                <h3 className="font-bold text-sm mb-3 uppercase tracking-wider" style={{ color: '#333f50' }}>Additional Resources</h3>
                 <div className="flex flex-wrap gap-3">
                   <a
                     href={PDF_DOCUMENTS.processMap.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 text-sm font-semibold text-blue-700"
+                    className="inline-flex items-center gap-2 px-4 py-2 border-2 rounded-lg transition-all duration-200 text-sm font-semibold"
+                    style={{ backgroundColor: 'rgba(196, 160, 6, 0.1)', borderColor: '#c4a006', color: '#333f50' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#c4a006';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                      e.currentTarget.style.color = '#333f50';
+                    }}
                   >
                     <FileText className="h-4 w-4" />
                     Process Map
@@ -412,7 +495,16 @@ export default function CanadaEvictionsScoringMap() {
                     href={PDF_DOCUMENTS.methodology.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 hover:border-blue-300 transition-all duration-200 text-sm font-semibold text-blue-700"
+                    className="inline-flex items-center gap-2 px-4 py-2 border-2 rounded-lg transition-all duration-200 text-sm font-semibold"
+                    style={{ backgroundColor: 'rgba(196, 160, 6, 0.1)', borderColor: '#c4a006', color: '#333f50' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#c4a006';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                      e.currentTarget.style.color = '#333f50';
+                    }}
                   >
                     <FileText className="h-4 w-4" />
                     Full Analysis
