@@ -138,7 +138,7 @@ export default function CanadaEvictionsScoringMap() {
         </header>
 
         {/* Top Section - Dropdowns and Current Indicator */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-6">
           {/* Left - Select Indicator Dropdown */}
           <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
             <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
@@ -205,12 +205,18 @@ export default function CanadaEvictionsScoringMap() {
           {/* Center - Current Indicator Info */}
           <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
             <div className="p-6">
-              <div className="flex flex-col gap-3">
-                <div className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#c4a006' }}>
-                  Current Indicator
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: '#c4a006' }}>
+                    Current Indicator
+                  </div>
+                  <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
+                  <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
                 </div>
-                <h2 className="text-2xl font-bold text-white">{selectedIndicator.name}</h2>
-                <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
+                <div className="flex-shrink-0 rounded-xl px-4 py-3 border-2" style={{ backgroundColor: 'rgba(196, 160, 6, 0.15)', borderColor: '#c4a006' }}>
+                  <div className="text-xs font-medium mb-1 text-center" style={{ color: '#c4a006' }}>Score Scale</div>
+                  <div className="text-3xl font-bold text-white text-center">1-5</div>
+                </div>
               </div>
             </div>
           </div>
