@@ -205,29 +205,10 @@ export default function CanadaEvictionsScoringMap() {
 
           {/* Main Content - Map and Info */}
           <div className="space-y-6">
-            {/* Current Indicator Info */}
-            <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-              <div className="p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: '#c4a006' }}>
-                      Current Indicator
-                    </div>
-                    <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
-                    <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
-                  </div>
-                  <div className="flex-shrink-0 rounded-xl px-4 py-3 border-2" style={{ backgroundColor: 'rgba(196, 160, 6, 0.15)', borderColor: '#c4a006' }}>
-                    <div className="text-xs font-medium mb-1 text-center" style={{ color: '#c4a006' }}>Score Scale</div>
-                    <div className="text-3xl font-bold text-white text-center">1-5</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Map */}
             <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
               <div className="p-6">
-                <div className="w-full h-[560px] relative bg-slate-50/50 rounded-xl overflow-hidden">
+                <div className="w-full h-[750px] relative bg-slate-50/50 rounded-xl overflow-hidden">
                   {/* Zoom Controls */}
                   <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
                     <button
