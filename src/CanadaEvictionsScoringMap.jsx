@@ -399,7 +399,6 @@ export default function CanadaEvictionsScoringMap() {
               </div>
             </div>
           </div>
-        </div>
       </div>
 
       {/* Province Details Dialog */}
