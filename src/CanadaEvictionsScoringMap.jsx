@@ -137,95 +137,141 @@ export default function CanadaEvictionsScoringMap() {
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6">
-          {/* Left Sidebar - Indicator Selector */}
-          <div className="space-y-5">
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
-                Select Indicator
-              </h2>
-              <div className="relative">
-                <button
-                  onClick={() => setIndicatorDropdownOpen(!indicatorDropdownOpen)}
-                  className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
-                  style={{ borderColor: '#333f50' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#c4a006';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#333f50';
-                  }}
-                >
-                  <span className="text-sm font-semibold">{selectedIndicator.shortName}</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${indicatorDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
-                </button>
+        {/* Top Section - Dropdowns and Current Indicator */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Left - Select Indicator Dropdown */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
+              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+              Select Indicator
+            </h2>
+            <div className="relative">
+              <button
+                onClick={() => setIndicatorDropdownOpen(!indicatorDropdownOpen)}
+                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
+                style={{ borderColor: '#333f50' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#c4a006';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#333f50';
+                }}
+              >
+                <span className="text-sm font-semibold">{selectedIndicator.shortName}</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${indicatorDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
+              </button>
 
-                {indicatorDropdownOpen && (
-                  <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
-                    <div className="max-h-80 overflow-y-auto">
-                      {INDICATORS.map((indicator) => (
-                        <button
-                          key={indicator.id}
-                          onClick={() => {
-                            setSelectedIndicator(indicator);
-                            setIndicatorDropdownOpen(false);
-                          }}
-                          className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
-                          style={
-                            selectedIndicator.id === indicator.id
-                              ? { backgroundColor: 'rgba(51, 63, 80, 0.08)', fontWeight: '700' }
-                              : {}
+              {indicatorDropdownOpen && (
+                <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
+                  <div className="max-h-80 overflow-y-auto">
+                    {INDICATORS.map((indicator) => (
+                      <button
+                        key={indicator.id}
+                        onClick={() => {
+                          setSelectedIndicator(indicator);
+                          setIndicatorDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
+                        style={
+                          selectedIndicator.id === indicator.id
+                            ? { backgroundColor: 'rgba(51, 63, 80, 0.08)', fontWeight: '700' }
+                            : {}
+                        }
+                        onMouseEnter={(e) => {
+                          if (selectedIndicator.id !== indicator.id) {
+                            e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
                           }
-                          onMouseEnter={(e) => {
-                            if (selectedIndicator.id !== indicator.id) {
-                              e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (selectedIndicator.id !== indicator.id) {
-                              e.currentTarget.style.backgroundColor = 'transparent';
-                            } else {
-                              e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
-                            }
-                          }}
-                        >
-                          <span>{indicator.shortName}</span>
-                          {selectedIndicator.id === indicator.id && (
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedIndicator.id !== indicator.id) {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                          } else {
+                            e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
+                          }
+                        }}
+                      >
+                        <span>{indicator.shortName}</span>
+                        {selectedIndicator.id === indicator.id && (
+                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+                        )}
+                      </button>
+                    ))}
                   </div>
-                )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Center - Current Indicator Info */}
+          <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+            <div className="p-6">
+              <div className="flex flex-col gap-3">
+                <div className="text-xs uppercase tracking-wider font-semibold" style={{ color: '#c4a006' }}>
+                  Current Indicator
+                </div>
+                <h2 className="text-2xl font-bold text-white">{selectedIndicator.name}</h2>
+                <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
               </div>
             </div>
           </div>
 
-          {/* Main Content - Map and Info */}
-          <div className="space-y-6">
-            {/* Current Indicator Info */}
-            <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-              <div className="p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: '#c4a006' }}>
-                      Current Indicator
-                    </div>
-                    <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
-                    <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
-                  </div>
-                  <div className="flex-shrink-0 rounded-xl px-4 py-3 border-2" style={{ backgroundColor: 'rgba(196, 160, 6, 0.15)', borderColor: '#c4a006' }}>
-                    <div className="text-xs font-medium mb-1 text-center" style={{ color: '#c4a006' }}>Score Scale</div>
-                    <div className="text-3xl font-bold text-white text-center">1-5</div>
+          {/* Right - Jump to Province Dropdown */}
+          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
+              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+              Jump to Province
+            </h2>
+            <div className="relative">
+              <button
+                onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
+                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
+                style={{ borderColor: '#333f50' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#c4a006';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#333f50';
+                }}
+              >
+                <span className="text-sm">Select province...</span>
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
+              </button>
+
+              {provinceDropdownOpen && (
+                <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
+                  <div className="max-h-80 overflow-y-auto">
+                    {provinceList.map((prov) => (
+                      <button
+                        key={prov.id}
+                        onClick={() => onSelectProvince(prov.id)}
+                        className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        <span>{prov.name}</span>
+                        <span
+                          className="px-2.5 py-1 rounded-lg text-xs font-bold text-white shadow-sm"
+                          style={{ backgroundColor: getScoreColor(prov.score) }}
+                        >
+                          {prov.score}
+                        </span>
+                      </button>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
             </div>
+          </div>
+        </div>
 
-            {/* Map */}
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
+        {/* Map Section - Full Width */}
+        <div className="w-full">
+          {/* Map */}
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
               <div className="p-6">
                 <div className="w-full h-[560px] relative bg-slate-50/50 rounded-xl overflow-hidden">
                   {/* Zoom Controls */}
@@ -350,61 +396,6 @@ export default function CanadaEvictionsScoringMap() {
                       </div>
                     </div>
                   </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Sidebar - Province Navigation */}
-          <div className="space-y-5">
-            {/* Province Quick Navigation */}
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-              <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-                <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
-                Jump to Province
-              </h2>
-              <div className="relative">
-                <button
-                  onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
-                  className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
-                  style={{ borderColor: '#333f50' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#c4a006';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#333f50';
-                  }}
-                >
-                  <span className="text-sm">Select province...</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
-                </button>
-
-                {provinceDropdownOpen && (
-                  <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
-                    <div className="max-h-80 overflow-y-auto">
-                      {provinceList.map((prov) => (
-                        <button
-                          key={prov.id}
-                          onClick={() => onSelectProvince(prov.id)}
-                          className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                          }}
-                        >
-                          <span>{prov.name}</span>
-                          <span
-                            className="px-2.5 py-1 rounded-lg text-xs font-bold text-white shadow-sm"
-                            style={{ backgroundColor: getScoreColor(prov.score) }}
-                          >
-                            {prov.score}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
