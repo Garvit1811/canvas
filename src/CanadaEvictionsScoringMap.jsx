@@ -287,17 +287,8 @@ export default function CanadaEvictionsScoringMap() {
           {selectedProvince && (
             <div className="space-y-4">
               <DialogHeader>
-                <DialogTitle className="text-2xl flex items-center justify-between">
+                <DialogTitle className="text-2xl">
                   <span>{PROVINCE_NAMES[selectedProvince]}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-normal text-neutral-600">Score:</span>
-                    <span
-                      className="px-4 py-2 rounded-lg text-xl font-bold text-white"
-                      style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
-                    >
-                      {getRegionScore(selectedProvince)}
-                    </span>
-                  </div>
                 </DialogTitle>
               </DialogHeader>
 
