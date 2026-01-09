@@ -405,7 +405,7 @@ export default function CanadaEvictionsScoringMap() {
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-200">
-                          <tr className="hover:bg-green-50/50 transition-colors">
+                          <tr className="hover:bg-blue-900/10 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
@@ -422,7 +422,7 @@ export default function CanadaEvictionsScoringMap() {
                               Extended notice periods, mandatory good faith requirements, automatic stay of eviction, comprehensive rent control
                             </td>
                           </tr>
-                          <tr className="hover:bg-lime-50/50 transition-colors">
+                          <tr className="hover:bg-blue-700/10 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
@@ -439,7 +439,7 @@ export default function CanadaEvictionsScoringMap() {
                               Adequate notice periods, accessible dispute hearings, compensation requirements, procedural transparency
                             </td>
                           </tr>
-                          <tr className="hover:bg-yellow-50/50 transition-colors">
+                          <tr className="hover:bg-blue-500/10 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
@@ -456,7 +456,7 @@ export default function CanadaEvictionsScoringMap() {
                               Standard notice periods, moderate filing fees, some delay mechanisms, limited compensation requirements
                             </td>
                           </tr>
-                          <tr className="hover:bg-orange-50/50 transition-colors">
+                          <tr className="hover:bg-yellow-600/10 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
@@ -473,7 +473,7 @@ export default function CanadaEvictionsScoringMap() {
                               Short notice periods, high filing fees, limited compensation, barriers to appeals, gaps in coverage
                             </td>
                           </tr>
-                          <tr className="hover:bg-red-50/50 transition-colors">
+                          <tr className="hover:bg-yellow-700/10 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
@@ -501,7 +501,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="!max-w-[90vw] w-[90vw] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="!max-w-[90vw] w-[90vw]">
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
@@ -590,7 +590,7 @@ export default function CanadaEvictionsScoringMap() {
               {/* All Scores for This Province */}
               <div>
                 <h3 className="font-bold text-xl mb-4" style={{ color: '#333f50' }}>All Indicator Scores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {INDICATORS.map(indicator => {
                     const score = getProvinceScore(selectedProvince, indicator.id);
                     return (
