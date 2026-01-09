@@ -501,7 +501,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="!max-w-[90vw] w-[90vw] max-h-[90vh] overflow-y-auto">
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
