@@ -11,7 +11,8 @@ import {
   getProvinceScore,
   getScoreExplanation,
   getScoreColor,
-  SCORE_DESCRIPTIONS
+  SCORE_DESCRIPTIONS,
+  getRubricCriteria
 } from "./data/indicatorScores";
 
 /**
@@ -529,9 +530,35 @@ export default function CanadaEvictionsScoringMap() {
 
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
-                  <p className="text-sm text-slate-700 leading-relaxed">
+                  <p className="text-sm text-slate-700 leading-relaxed mb-4">
                     {getScoreExplanation(selectedIndicator.id, getRegionScore(selectedProvince))}
                   </p>
+
+                  {/* Detailed Rubric Breakdown */}
+                  {(() => {
+                    const rubricCriteria = getRubricCriteria(selectedIndicator.id);
+                    const score = getRegionScore(selectedProvince);
+                    if (rubricCriteria && rubricCriteria[score]) {
+                      const criteria = rubricCriteria[score];
+                      return (
+                        <div className="mt-4 p-4 bg-white rounded-lg border border-slate-200">
+                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Rubric Criteria for this Score</div>
+                          <div className="space-y-2">
+                            {Object.entries(criteria).map(([key, value]) => (
+                              <div key={key} className="flex gap-3">
+                                <div className="flex-shrink-0 w-2 h-2 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
+                                <div className="flex-1">
+                                  <span className="font-semibold text-slate-700 text-sm capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
+                                  <span className="text-slate-600 text-sm">{value}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
               </div>
 

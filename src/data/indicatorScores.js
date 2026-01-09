@@ -39,6 +39,33 @@ export const INDICATORS = [
       3: "10-13 days to dispute; standard hearing processes",
       4: "14-20 days to dispute; accessible hearing procedures",
       5: "Two weeks or more to dispute; comprehensive hearing access"
+    },
+    rubricCriteria: {
+      5: {
+        disputePeriod: "≥14 days",
+        process: "Clear process with minimal barriers",
+        hearingAccess: "Free or low-cost, accessible (multiple modes), timely"
+      },
+      4: {
+        disputePeriod: "10-13 days",
+        process: "Accessible process",
+        hearingAccess: "Accessible (at least 2 modes, moderate cost, minor barriers)"
+      },
+      3: {
+        disputePeriod: "7-9 days",
+        process: "Requires effort (written/in-person filing)",
+        hearingAccess: "Less accessible (1 mode), moderate cost, some procedural complexity"
+      },
+      2: {
+        disputePeriod: "<7 days",
+        process: "High burden effort",
+        hearingAccess: "Less accessible (1 mode), higher cost, significant procedural complexity"
+      },
+      1: {
+        disputePeriod: "Extremely limited",
+        process: "Unclear dispute process",
+        hearingAccess: "Rare or no formal hearing, no tenant participation"
+      }
     }
   },
   {
@@ -52,6 +79,29 @@ export const INDICATORS = [
       3: "Balanced process; standard protections",
       4: "Tenant-protective procedures; strong safeguards",
       5: "Comprehensive tenant protections; maximum due process"
+    },
+    rubricCriteria: {
+      5: {
+        proceduralChecks: "Multiple procedural checks required",
+        landlordRequirement: "Proven necessity from landlord required",
+        application: "Landlord application needed"
+      },
+      4: {
+        proceduralChecks: "Procedural checks in place",
+        discretion: "Tribunal/court discretion to delay or refuse enforcement"
+      },
+      3: {
+        enforcement: "Typical enforcement process",
+        orderIssued: "Order issued after hearing"
+      },
+      2: {
+        checks: "Minimal checks",
+        tenantOpportunity: "No opportunity to delay or contest enforcement"
+      },
+      1: {
+        eviction: "Almost automatic eviction",
+        tenantInput: "No opportunity for tenant input or delay"
+      }
     }
   },
   {
@@ -65,6 +115,28 @@ export const INDICATORS = [
       3: "Moderate controls; some limitations",
       4: "Strong, enforceable caps tied to inflation levels",
       5: "Comprehensive rent control with strict enforcement"
+    },
+    rubricCriteria: {
+      5: {
+        strength: "Strong, enforceable caps to increases",
+        coverage: "Tied to the unit (not tenancy)"
+      },
+      4: {
+        strength: "Strong, enforceable caps",
+        coverage: "Tied to inflation level"
+      },
+      3: {
+        protections: "Limited protections",
+        coverage: "Rent control only for certain tenancies",
+        landlordAccess: "Easy for landlord to get increases"
+      },
+      2: {
+        strength: "Rare, weak protections",
+        landlordAccess: "Easy to bypass process for increases"
+      },
+      1: {
+        status: "No rent control"
+      }
     }
   },
   {
@@ -78,6 +150,27 @@ export const INDICATORS = [
       3: "Moderate restrictions; standard review process",
       4: "Significant restrictions; rigorous review required",
       5: "Strict limitations; tenant-favorable review process"
+    },
+    rubricCriteria: {
+      5: {
+        considerations: "Thorough and mandatory considerations",
+        term: "Term limits for AGIs"
+      },
+      4: {
+        considerations: "Thorough and mandatory considerations",
+        term: "No term limits"
+      },
+      3: {
+        considerations: "Some consideration",
+        term: "No term limits"
+      },
+      2: {
+        maximum: "No maximum on above guideline increases",
+        term: "No term limits"
+      },
+      1: {
+        status: "Not applicable"
+      }
     }
   },
   {
@@ -91,6 +184,27 @@ export const INDICATORS = [
       3: "Standard eviction grounds; moderate restrictions",
       4: "Limited eviction grounds; strong restrictions",
       5: "Narrow eviction grounds; maximum tenant protections"
+    },
+    rubricCriteria: {
+      5: {
+        grounds: "Only for serious cause",
+        noFault: "No-fault evictions banned"
+      },
+      4: {
+        grounds: "Strict cause required in most cases",
+        regulation: "Tightly regulated"
+      },
+      3: {
+        grounds: "Allows some no-fault evictions",
+        safeguards: "With safeguards (notice, compensation, proof)"
+      },
+      2: {
+        grounds: "Landlord discretion for no-cause",
+        restrictions: "Few restrictions"
+      },
+      1: {
+        limits: "No limits on eviction grounds"
+      }
     }
   },
   {
@@ -104,6 +218,27 @@ export const INDICATORS = [
       3: "Moderate compensation requirements",
       4: "Strong compensation requirements for most evictions",
       5: "Comprehensive compensation mandated for all non-fault evictions"
+    },
+    rubricCriteria: {
+      5: {
+        requirement: "Mandatory compensation",
+        amount: "Substantial (≥3 months rent)"
+      },
+      4: {
+        availability: "Available for no-fault/renoviction",
+        amount: "Less than 3 months rent"
+      },
+      3: {
+        availability: "Limited to specific cases",
+        process: "Requires application"
+      },
+      2: {
+        availability: "Rare or discretionary",
+        requirement: "Not required by law"
+      },
+      1: {
+        status: "No compensation"
+      }
     }
   },
   {
@@ -117,6 +252,30 @@ export const INDICATORS = [
       3: "Standard appeal process; moderate access",
       4: "Accessible appeal process; multiple review options",
       5: "Comprehensive appeal rights; tenant-friendly review mechanisms"
+    },
+    rubricCriteria: {
+      5: {
+        cost: "Free appeal process",
+        stay: "Automatic stay of eviction",
+        accessibility: "Easily accessible",
+        period: "30 days between decision and appeal"
+      },
+      4: {
+        cost: "Affordable",
+        stay: "Potential for stay",
+        accessibility: "Accessible"
+      },
+      3: {
+        availability: "Can appeal",
+        stay: "Potential for stay but may not delay eviction"
+      },
+      2: {
+        cost: "Costly or legally burdensome",
+        grounds: "Limited grounds for appeal"
+      },
+      1: {
+        availability: "Not practical or available"
+      }
     }
   },
   {
@@ -130,6 +289,26 @@ export const INDICATORS = [
       3: "Mixed onus; standard fees with some waivers",
       4: "Landlord must file; low fees with waivers available",
       5: "Landlord must file; no fees or automatic waivers"
+    },
+    rubricCriteria: {
+      5: {
+        onus: "Onus on landlord",
+        fee: "No fees or automatic waivers"
+      },
+      4: {
+        onus: "Onus on landlord",
+        fee: "Low fee (<$100)"
+      },
+      3: {
+        onus: "Hybrid onus (shared responsibility)"
+      },
+      2: {
+        onus: "Onus on tenant"
+      },
+      1: {
+        onus: "Onus on tenant",
+        fee: "High fee (>$100), no waivers"
+      }
     }
   },
   {
@@ -143,6 +322,24 @@ export const INDICATORS = [
       3: "Standard conditional orders; available in some cases",
       4: "Accessible conditional orders; frequently available",
       5: "Comprehensive conditional order system; tenant-favorable"
+    },
+    rubricCriteria: {
+      5: {
+        usage: "Routinely used to prevent eviction"
+      },
+      4: {
+        availability: "Available and issued in some cases"
+      },
+      3: {
+        availability: "Theoretically available",
+        usage: "Rarely used"
+      },
+      2: {
+        usage: "Rarely used or allowed"
+      },
+      1: {
+        status: "Not permitted or unclear"
+      }
     }
   }
 ];
@@ -334,6 +531,12 @@ export function getProvinceScore(provinceId, indicatorId) {
 export function getScoreExplanation(indicatorId, score) {
   const indicator = INDICATORS.find(i => i.id === indicatorId);
   return indicator?.scoreDescriptions[score] || "No description available";
+}
+
+// Helper function to get rubric criteria for an indicator
+export function getRubricCriteria(indicatorId) {
+  const indicator = INDICATORS.find(i => i.id === indicatorId);
+  return indicator?.rubricCriteria || null;
 }
 
 // Color mapping for scores (1=red to 5=green)
