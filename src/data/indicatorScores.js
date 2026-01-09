@@ -539,14 +539,14 @@ export function getRubricCriteria(indicatorId) {
   return indicator?.rubricCriteria || null;
 }
 
-// Color mapping for scores - BSH blue and gold theme (dark blue=best to gold=worst)
+// Color mapping for scores (1=red to 5=green)
 export function getScoreColor(score) {
   const colors = {
-    1: "#d97706", // amber-600 - Minimal (darker gold)
-    2: "#f59e0b", // amber-500 - Limited (gold)
-    3: "#3b82f6", // blue-500 - Moderate (medium blue)
-    4: "#1d4ed8", // blue-700 - Strong (darker blue)
-    5: "#1e3a8a"  // blue-900 - Comprehensive (darkest blue)
+    1: "#ef4444", // red-500 - Minimal
+    2: "#f97316", // orange-500 - Limited
+    3: "#eab308", // yellow-500 - Moderate
+    4: "#84cc16", // lime-500 - Strong
+    5: "#22c55e"  // green-500 - Comprehensive
   };
   return colors[score] || "#9ca3af"; // gray-400 for no data
 }
