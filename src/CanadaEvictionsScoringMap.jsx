@@ -388,106 +388,109 @@ export default function CanadaEvictionsScoringMap() {
 
                   {/* Comprehensive Legend */}
                   <div className="mt-6 pt-6 border-t-2" style={{ borderColor: '#333f50' }}>
-                    <h3 className="text-lg font-bold mb-4" style={{ color: '#333f50' }}>Understanding the Scoring System</h3>
-                    <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                      Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections and more robust procedural safeguards.
+                    <h3 className="text-lg font-bold mb-3" style={{ color: '#333f50' }}>Understanding the Scoring System</h3>
+                    <p className="text-sm text-slate-600 mb-4">
+                      Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
                     </p>
 
-                    <div className="space-y-3">
-                      {/* Score 5 */}
-                      <div className="border-2 rounded-xl p-4 bg-gradient-to-r from-green-50/50 to-white" style={{ borderColor: getScoreColor(5) }}>
-                        <div className="flex items-start gap-4">
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <span
-                              className="w-10 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center text-white font-bold text-lg"
-                              style={{ backgroundColor: getScoreColor(5) }}
-                            >5</span>
-                            <div className="font-bold text-slate-900">Best</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-slate-700 leading-relaxed">
-                              <span className="font-semibold">Meets or exceeds best practice</span> with robust procedural safeguards and unique tenant protections.
-                              Examples: Longest notice periods, mandatory good faith affidavits, automatic stays, comprehensive rent control with broad coverage.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Score 4 */}
-                      <div className="border-2 rounded-xl p-4 bg-gradient-to-r from-lime-50/50 to-white" style={{ borderColor: getScoreColor(4) }}>
-                        <div className="flex items-start gap-4">
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <span
-                              className="w-10 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center text-white font-bold text-lg"
-                              style={{ backgroundColor: getScoreColor(4) }}
-                            >4</span>
-                            <div className="font-bold text-slate-900">Strong</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-slate-700 leading-relaxed">
-                              <span className="font-semibold">Meets best practice</span> with strong safeguards in place.
-                              Examples: Meets notice benchmarks, accessible hearings, compensation available, procedural transparency, limited exclusions.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Score 3 */}
-                      <div className="border-2 rounded-xl p-4 bg-gradient-to-r from-yellow-50/50 to-white" style={{ borderColor: getScoreColor(3) }}>
-                        <div className="flex items-start gap-4">
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <span
-                              className="w-10 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center text-white font-bold text-lg"
-                              style={{ backgroundColor: getScoreColor(3) }}
-                            >3</span>
-                            <div className="font-bold text-slate-900">Adequate</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-slate-700 leading-relaxed">
-                              <span className="font-semibold">Just under benchmark</span> or meets only one element (notice or safeguard).
-                              Examples: Slightly short notice periods, moderate fees, some delays, limited compensation, standard legal framework.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Score 2 */}
-                      <div className="border-2 rounded-xl p-4 bg-gradient-to-r from-orange-50/50 to-white" style={{ borderColor: getScoreColor(2) }}>
-                        <div className="flex items-start gap-4">
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <span
-                              className="w-10 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center text-white font-bold text-lg"
-                              style={{ backgroundColor: getScoreColor(2) }}
-                            >2</span>
-                            <div className="font-bold text-slate-900">Weak</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-slate-700 leading-relaxed">
-                              <span className="font-semibold">Short notice or minimal safeguards.</span>
-                              Examples: Short notice periods, high fees, rare compensation, barriers to appeal, significant gaps in coverage.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Score 1 */}
-                      <div className="border-2 rounded-xl p-4 bg-gradient-to-r from-red-50/50 to-white" style={{ borderColor: getScoreColor(1) }}>
-                        <div className="flex items-start gap-4">
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <span
-                              className="w-10 h-10 rounded-lg shadow-sm border-2 border-white flex items-center justify-center text-white font-bold text-lg"
-                              style={{ backgroundColor: getScoreColor(1) }}
-                            >1</span>
-                            <div className="font-bold text-slate-900">Minimal/None</div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-slate-700 leading-relaxed">
-                              <span className="font-semibold">Immediate or very short notice</span> with no safeguards or outdated/inaccessible processes.
-                              Examples: Immediate eviction possible, no hearings required, no rent control, major exclusions, rare or no compensation.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                    {/* Table Format */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 rounded-xl overflow-hidden" style={{ borderColor: '#333f50' }}>
+                        <thead>
+                          <tr style={{ backgroundColor: '#333f50' }}>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Description</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Examples</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-200">
+                          <tr className="hover:bg-green-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(5) }}
+                                >5</span>
+                                <span className="font-bold text-slate-900">Best</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Meets/exceeds best practice with robust safeguards
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Longest notice, mandatory affidavits, automatic stays, comprehensive rent control
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-lime-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(4) }}
+                                >4</span>
+                                <span className="font-bold text-slate-900">Strong</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Meets best practice with strong protections
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Meets notice benchmarks, accessible hearings, compensation available
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-yellow-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(3) }}
+                                >3</span>
+                                <span className="font-bold text-slate-900">Adequate</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Just under benchmark or meets one element
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Slightly short notice, moderate fees, limited compensation
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-orange-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(2) }}
+                                >2</span>
+                                <span className="font-bold text-slate-900">Weak</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Short notice or minimal safeguards
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Short notice, high fees, rare compensation, barriers to appeal
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-red-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(1) }}
+                                >1</span>
+                                <span className="font-bold text-slate-900">Minimal/None</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Immediate/very short notice with no safeguards
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Immediate eviction possible, no hearings, no rent control, major exclusions
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
               </div>
