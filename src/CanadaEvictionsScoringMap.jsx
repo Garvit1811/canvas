@@ -501,7 +501,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
@@ -540,20 +540,20 @@ export default function CanadaEvictionsScoringMap() {
                     const currentScore = getRegionScore(selectedProvince);
                     if (rubricCriteria) {
                       return (
-                        <div className="mt-4 p-4 bg-white rounded-lg border border-slate-200">
-                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Scoring Scale (1-5)</div>
-                          <div className="space-y-4">
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200">
+                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2.5">Scoring Scale (1-5)</div>
+                          <div className="space-y-2.5">
                             {[5, 4, 3, 2, 1].map(score => {
                               const criteria = rubricCriteria[score];
                               const isCurrentScore = score === currentScore;
                               return (
                                 <div
                                   key={score}
-                                  className={`p-3 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
+                                  className={`p-2.5 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
                                 >
-                                  <div className="flex items-center gap-3 mb-2">
+                                  <div className="flex items-center gap-2.5 mb-1.5">
                                     <div
-                                      className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                                      className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm"
                                       style={{ backgroundColor: getScoreColor(score) }}
                                     >
                                       {score}
@@ -563,13 +563,13 @@ export default function CanadaEvictionsScoringMap() {
                                     )}
                                   </div>
                                   {criteria && (
-                                    <div className="space-y-1.5 ml-11">
+                                    <div className="space-y-1 ml-9">
                                       {Object.entries(criteria).map(([key, value]) => (
-                                        <div key={key} className="flex gap-2">
-                                          <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
-                                          <div className="flex-1">
-                                            <span className="font-semibold text-slate-700 text-xs capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
-                                            <span className="text-slate-600 text-xs">{value}</span>
+                                        <div key={key} className="flex gap-2 items-start">
+                                          <div className="flex-shrink-0 w-1 h-1 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
+                                          <div className="flex-1 text-xs leading-tight">
+                                            <span className="font-semibold text-slate-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
+                                            <span className="text-slate-600">{value}</span>
                                           </div>
                                         </div>
                                       ))}
