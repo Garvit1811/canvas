@@ -98,14 +98,18 @@ export default function CanadaEvictionsScoringMap() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <header className="mb-10">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-extrabold mb-3 tracking-tight" style={{ color: '#333f50' }}>
-              Canada Eviction Law Comparison
-            </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Interactive analysis of provincial eviction laws across 10 key indicators.
-              Compare tenant protections and procedural safeguards nationwide.
-            </p>
+          <div className="rounded-2xl shadow-xl mb-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+            <div className="text-center px-8 py-10">
+              <h1 className="text-5xl font-extrabold mb-4 tracking-tight text-white">
+                Canada Eviction Law Comparison
+              </h1>
+              <p className="text-xl mb-4 max-w-4xl mx-auto leading-relaxed" style={{ color: '#c4a006' }}>
+                An interactive tool to understand and compare tenant protections across Canadian provinces
+              </p>
+              <p className="text-base text-slate-200 max-w-4xl mx-auto leading-relaxed">
+                Eviction laws determine how and when landlords can remove tenants from rental housing. These laws vary significantly across Canada, affecting millions of renters. This tool evaluates each province across 10 key indicators—including notice periods, hearing processes, rent control, and appeal rights—using a 5-point scale. Higher scores indicate stronger tenant protections. Use the map and indicators below to explore how your province compares and understand what protections exist for renters in different regions.
+              </p>
+            </div>
           </div>
 
           {/* PDF Resources */}
