@@ -101,7 +101,7 @@ export default function CanadaEvictionsScoringMap() {
           <div className="rounded-2xl shadow-xl mb-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
             <div className="text-center px-8 py-10">
               <h1 className="text-5xl font-extrabold mb-4 tracking-tight text-white">
-                Canada Eviction Law Comparison
+                Canadian Provincial Eviction Process Comparison
               </h1>
               <p className="text-xl mb-4 max-w-4xl mx-auto leading-relaxed" style={{ color: '#c4a006' }}>
                 An interactive tool to understand and compare tenant protections across Canadian provinces
