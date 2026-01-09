@@ -346,29 +346,33 @@ export default function CanadaEvictionsScoringMap() {
                                 const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
                                 const name = String(rawName);
                                 const id = NAME_TO_ID[name];
-                                const score = id ? getRegionScore(id) : null;
-                                const fill = score ? getScoreColor(score) : "#e5e7eb";
+
+                                // Grey out territories without data (NT, NU)
+                                const isGreyedOut = id && ['NT', 'NU'].includes(id);
+                                const score = id && !isGreyedOut ? getRegionScore(id) : null;
+                                const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
+                                const isClickable = id && !isGreyedOut;
 
                                 return (
                                   <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
-                                    onClick={() => id && onSelectProvince(id)}
+                                    onClick={() => isClickable && onSelectProvince(id)}
                                     style={{
                                       default: {
                                         fill,
                                         stroke: "#ffffff",
                                         strokeWidth: 1.5,
                                         outline: "none",
-                                        cursor: id ? "pointer" : "default",
+                                        cursor: isClickable ? "pointer" : "default",
                                       },
                                       hover: {
-                                        fill,
-                                        stroke: "#111111",
-                                        strokeWidth: 2,
+                                        fill: isGreyedOut ? fill : fill,
+                                        stroke: isGreyedOut ? "#ffffff" : "#111111",
+                                        strokeWidth: isGreyedOut ? 1.5 : 2,
                                         outline: "none",
-                                        cursor: id ? "pointer" : "default",
-                                        filter: "brightness(1.1)",
+                                        cursor: isClickable ? "pointer" : "default",
+                                        filter: isGreyedOut ? "none" : "brightness(1.1)",
                                       },
                                       pressed: { fill, outline: "none" },
                                     }}
