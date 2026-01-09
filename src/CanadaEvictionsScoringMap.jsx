@@ -415,10 +415,10 @@ export default function CanadaEvictionsScoringMap() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-700">
-                              Meets/exceeds best practice with robust safeguards
+                              Comprehensive protections that meet or exceed best practices
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600">
-                              Longest notice, mandatory affidavits, automatic stays, comprehensive rent control
+                              Extended notice periods, mandatory good faith requirements, automatic stay of eviction, comprehensive rent control
                             </td>
                           </tr>
                           <tr className="hover:bg-lime-50/50 transition-colors">
@@ -432,10 +432,10 @@ export default function CanadaEvictionsScoringMap() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-700">
-                              Meets best practice with strong protections
+                              Strong protections that meet best practice standards
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600">
-                              Meets notice benchmarks, accessible hearings, compensation available
+                              Adequate notice periods, accessible dispute hearings, compensation requirements, procedural transparency
                             </td>
                           </tr>
                           <tr className="hover:bg-yellow-50/50 transition-colors">
@@ -449,10 +449,10 @@ export default function CanadaEvictionsScoringMap() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-700">
-                              Just under benchmark or meets one element
+                              Moderate protections that fall slightly below benchmarks
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600">
-                              Slightly short notice, moderate fees, limited compensation
+                              Standard notice periods, moderate filing fees, some delay mechanisms, limited compensation requirements
                             </td>
                           </tr>
                           <tr className="hover:bg-orange-50/50 transition-colors">
@@ -466,10 +466,10 @@ export default function CanadaEvictionsScoringMap() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-700">
-                              Short notice or minimal safeguards
+                              Weak protections with limited procedural safeguards
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600">
-                              Short notice, high fees, rare compensation, barriers to appeal
+                              Short notice periods, high filing fees, limited compensation, barriers to appeals, gaps in coverage
                             </td>
                           </tr>
                           <tr className="hover:bg-red-50/50 transition-colors">
@@ -483,10 +483,10 @@ export default function CanadaEvictionsScoringMap() {
                               </div>
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-700">
-                              Immediate/very short notice with no safeguards
+                              Minimal or no protections for tenants
                             </td>
                             <td className="px-4 py-3 text-sm text-slate-600">
-                              Immediate eviction possible, no hearings, no rent control, major exclusions
+                              Immediate or very short notice, no hearing requirements, no rent control, major coverage exclusions, no compensation
                             </td>
                           </tr>
                         </tbody>
