@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canada Evictions Scoring Map | BSH - UBC</title>
+  <meta name="description" content="Interactive map comparing eviction laws across Canadian provinces and territories">
+
+  <style>
+    /* BSH Branding Template - Customize with actual BSH styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Header Section - Replace with actual BSH header */
+    .bsh-header {
+      background-color: #002145; /* UBC Blue */
+      color: white;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .bsh-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .bsh-header nav {
+      margin-top: 0.5rem;
+    }
+
+    .bsh-header a {
+      color: white;
+      text-decoration: none;
+      margin-right: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .bsh-header a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Content Area */
+    .bsh-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .bsh-intro {
+      margin-bottom: 2rem;
+    }
+
+    .bsh-intro h2 {
+      font-size: 2rem;
+      color: #002145;
+      margin-bottom: 1rem;
+    }
+
+    .bsh-intro p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    .bsh-intro .highlight-box {
+      background-color: #f0f7ff;
+      border-left: 4px solid #0055b7;
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    /* Map Container */
+    .map-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+
+    .map-embed {
+      width: 100%;
+      min-height: 900px;
+      border: none;
+    }
+
+    /* Footer Section - Replace with actual BSH footer */
+    .bsh-footer {
+      background-color: #f8f9fa;
+      border-top: 3px solid #002145;
+      padding: 2rem;
+      margin-top: 3rem;
+    }
+
+    .bsh-footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .bsh-footer h3 {
+      color: #002145;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .bsh-footer p,
+    .bsh-footer a {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .bsh-footer a {
+      display: block;
+      text-decoration: none;
+    }
+
+    .bsh-footer a:hover {
+      color: #0055b7;
+      text-decoration: underline;
+    }
+
+    .bsh-copyright {
+      text-align: center;
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+      border-top: 1px solid #ddd;
+      color: #777;
+      font-size: 0.85rem;
+    }
+
+    /* Methodology Section */
+    .methodology {
+      background-color: #f8f9fa;
+      padding: 2rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+
+    .methodology h3 {
+      color: #002145;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .methodology ul {
+      margin-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .methodology li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .bsh-header {
+        padding: 1rem;
+      }
+
+      .bsh-container {
+        padding: 1rem;
+      }
+
+      .bsh-intro h2 {
+        font-size: 1.5rem;
+      }
+
+      .map-embed {
+        min-height: 700px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- BSH HEADER - Replace this section with actual BSH header HTML -->
+  <header class="bsh-header">
+    <h1>BSH - UBC</h1>
+    <nav>
+      <a href="https://bsh.ubc.ca">Home</a>
+      <a href="https://bsh.ubc.ca/about">About</a>
+      <a href="https://bsh.ubc.ca/research">Research</a>
+      <a href="https://bsh.ubc.ca/evictions-map">Evictions Map</a>
+      <a href="https://bsh.ubc.ca/contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="bsh-container">
+    <!-- Introduction Section -->
+    <section class="bsh-intro">
+      <h2>Canada Evictions Scoring Map</h2>
+
+      <p>
+        This interactive map provides a comprehensive comparison of eviction laws across
+        Canadian provinces and territories. Using a rigorous scoring system, we evaluate
+        10 key indicators that measure tenant protections and procedural safeguards in
+        eviction processes.
+      </p>
+
+      <div class="highlight-box">
+        <strong>How to use this map:</strong><br>
+        Select an indicator from the right sidebar to view provincial scores. Click on
+        any province or territory to see detailed information about that jurisdiction's
+        eviction laws and protections.
+      </div>
+
+      <p>
+        Each province and territory is scored on a scale of 1 to 5 for each indicator,
+        where 1 represents minimal protections and 5 represents comprehensive tenant
+        safeguards. The map uses color coding from red (lower scores) to green (higher
+        scores) for easy visual comparison.
+      </p>
+    </section>
+
+    <!-- The Interactive Map -->
+    <div class="map-container">
+      <!-- OPTION A: Iframe Embed (Replace URL with your Netlify deployment) -->
+      <iframe
+        class="map-embed"
+        src="https://your-site.netlify.app"
+        title="Canada Evictions Scoring Map"
+        allow="fullscreen">
+      </iframe>
+
+      <!-- OPTION B: Direct Integration (Replace with actual React app root)
+      <div id="root"></div>
+      <script type="module" src="/assets/index.js"></script>
+      -->
+    </div>
+
+    <!-- Methodology Section -->
+    <section class="methodology">
+      <h3>About Our Methodology</h3>
+      <p>
+        Our scoring system evaluates eviction laws based on 10 critical indicators:
+      </p>
+      <ul>
+        <li><strong>Notice of Termination:</strong> Required notice periods and termination procedures</li>
+        <li><strong>Hearing & Decision:</strong> Tribunal/court processes and tenant participation rights</li>
+        <li><strong>Order of Possession:</strong> Enforcement procedures and tenant safeguards</li>
+        <li><strong>Rent Control:</strong> Rent increase limitations and protections</li>
+        <li><strong>Above Guideline Increases:</strong> Processes for rent increases beyond standard limits</li>
+        <li><strong>Eviction Types:</strong> Restrictions on grounds for eviction</li>
+        <li><strong>Compensation:</strong> Financial protections and compensation requirements</li>
+        <li><strong>Appeals:</strong> Availability and accessibility of appeal processes</li>
+        <li><strong>Onus & Filing Fee:</strong> Burden of proof and cost barriers</li>
+        <li><strong>Conditional Orders:</strong> Options for conditional eviction orders</li>
+      </ul>
+
+      <p style="margin-top: 1rem;">
+        <a href="/pdfs/EvictionMaps_2025.pdf" style="color: #0055b7; font-weight: 600;">
+          Download Technical Rubric & Methodology Report (PDF)
+        </a>
+      </p>
+    </section>
+
+    <!-- Additional Context -->
+    <section class="bsh-intro" style="margin-top: 2rem;">
+      <h3 style="font-size: 1.5rem; color: #002145; margin-bottom: 1rem;">
+        About This Project
+      </h3>
+      <p>
+        This research project systematically analyzes and compares residential eviction
+        laws across Canada. By scoring each jurisdiction on key indicators, we provide
+        policymakers, researchers, and advocates with data-driven insights into tenant
+        protections and procedural fairness.
+      </p>
+      <p>
+        The project is part of ongoing research at BSH - UBC examining housing policy,
+        tenant rights, and eviction prevention strategies across Canadian jurisdictions.
+      </p>
+    </section>
+  </main>
+
+  <!-- BSH FOOTER - Replace this section with actual BSH footer HTML -->
+  <footer class="bsh-footer">
+    <div class="bsh-footer-content">
+      <div>
+        <h3>About BSH</h3>
+        <p>
+          BSH - UBC conducts research on housing policy, tenant rights, and
+          eviction prevention strategies.
+        </p>
+      </div>
+
+      <div>
+        <h3>Quick Links</h3>
+        <a href="https://bsh.ubc.ca/research">Our Research</a>
+        <a href="https://bsh.ubc.ca/publications">Publications</a>
+        <a href="https://bsh.ubc.ca/team">Our Team</a>
+      </div>
+
+      <div>
+        <h3>Resources</h3>
+        <a href="/pdfs/EvictionMaps_2025.pdf">Process Maps (PDF)</a>
+        <a href="https://bsh.ubc.ca/methodology">Methodology</a>
+        <a href="https://bsh.ubc.ca/data">Data & Sources</a>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <p>
+          University of British Columbia<br>
+          Vancouver, BC<br>
+          <a href="mailto:contact@bsh.ubc.ca">contact@bsh.ubc.ca</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="bsh-copyright">
+      <p>&copy; 2025 BSH - University of British Columbia. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- INSTRUCTIONS FOR CUSTOMIZATION -->
+  <!--
+    TO CUSTOMIZE THIS TEMPLATE:
+
+    1. Replace the header section with actual BSH header HTML/CSS
+    2. Replace the footer section with actual BSH footer HTML/CSS
+    3. Update the iframe src URL with your Netlify deployment URL
+    4. Add actual BSH logo and branding colors
+    5. Update navigation links to match BSH site structure
+    6. Add actual contact information
+    7. Customize text content as needed
+
+    FOR DIRECT INTEGRATION (not iframe):
+    - Build your React app: npm run build
+    - Copy contents of dist/ folder
+    - Replace the iframe with: <div id="root"></div>
+    - Include the built JS/CSS assets
+    - Wrap the built index.html content in this template
+  -->
+</body>
+</html>
