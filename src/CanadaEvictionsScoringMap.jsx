@@ -94,7 +94,7 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-blue-50/20">
+    <div className="w-full min-h-screen" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e8f0f7 100%)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
@@ -511,15 +511,17 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="!max-w-[90vw] w-[90vw]">
+        <DialogContent className="!max-w-[90vw] w-[90vw] !p-0">
           {selectedProvince && (
-            <div className="space-y-6">
-              <DialogHeader>
-                <DialogTitle className="text-2xl">
-                  <span>{PROVINCE_NAMES[selectedProvince]}</span>
+            <div className="space-y-0">
+              <DialogHeader className="!mb-0 rounded-t-lg overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                <DialogTitle className="text-3xl px-8 py-6">
+                  <span className="text-white font-bold">{PROVINCE_NAMES[selectedProvince]}</span>
+                  <div className="text-sm font-normal mt-1" style={{ color: '#c4a006' }}>Provincial Eviction Law Analysis</div>
                 </DialogTitle>
               </DialogHeader>
 
+              <div className="px-8 py-6 space-y-6">
               {/* Current Indicator Score Details */}
               <div className="rounded-xl p-5 border-2 shadow-sm" style={{ backgroundColor: 'rgba(51, 63, 80, 0.04)', borderColor: '#333f50' }}>
                 <div className="flex items-start justify-between mb-4">
@@ -679,6 +681,7 @@ export default function CanadaEvictionsScoringMap() {
                     Full Analysis
                   </a>
                 </div>
+              </div>
               </div>
             </div>
           )}
