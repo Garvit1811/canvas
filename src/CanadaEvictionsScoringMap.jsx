@@ -94,7 +94,7 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e8f0f7 100%)' }}>
+    <div className="w-full min-h-screen" style={{ background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #b0c4de 100%)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
@@ -511,13 +511,13 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="!max-w-[90vw] w-[90vw] !p-0">
+        <DialogContent className="!max-w-[90vw] w-[90vw] !p-0 !rounded-2xl overflow-hidden">
           {selectedProvince && (
             <div className="space-y-0">
-              <DialogHeader className="!mb-0 rounded-t-lg overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-                <DialogTitle className="text-3xl px-8 py-6">
-                  <span className="text-white font-bold">{PROVINCE_NAMES[selectedProvince]}</span>
-                  <div className="text-sm font-normal mt-1" style={{ color: '#c4a006' }}>Provincial Eviction Law Analysis</div>
+              <DialogHeader className="!mb-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                <DialogTitle className="px-8 py-8">
+                  <div className="text-4xl font-extrabold text-white mb-2">{PROVINCE_NAMES[selectedProvince]}</div>
+                  <div className="text-base font-semibold tracking-wide" style={{ color: '#c4a006' }}>Provincial Eviction Score Breakdown</div>
                 </DialogTitle>
               </DialogHeader>
 
