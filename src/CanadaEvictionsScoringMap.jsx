@@ -346,29 +346,33 @@ export default function CanadaEvictionsScoringMap() {
                                 const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
                                 const name = String(rawName);
                                 const id = NAME_TO_ID[name];
-                                const score = id ? getRegionScore(id) : null;
-                                const fill = score ? getScoreColor(score) : "#e5e7eb";
+
+                                // Grey out territories without data (NT, NU)
+                                const isGreyedOut = id && ['NT', 'NU'].includes(id);
+                                const score = id && !isGreyedOut ? getRegionScore(id) : null;
+                                const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
+                                const isClickable = id && !isGreyedOut;
 
                                 return (
                                   <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
-                                    onClick={() => id && onSelectProvince(id)}
+                                    onClick={() => isClickable && onSelectProvince(id)}
                                     style={{
                                       default: {
                                         fill,
                                         stroke: "#ffffff",
                                         strokeWidth: 1.5,
                                         outline: "none",
-                                        cursor: id ? "pointer" : "default",
+                                        cursor: isClickable ? "pointer" : "default",
                                       },
                                       hover: {
-                                        fill,
-                                        stroke: "#111111",
-                                        strokeWidth: 2,
+                                        fill: isGreyedOut ? fill : fill,
+                                        stroke: isGreyedOut ? "#ffffff" : "#111111",
+                                        strokeWidth: isGreyedOut ? 1.5 : 2,
                                         outline: "none",
-                                        cursor: id ? "pointer" : "default",
-                                        filter: "brightness(1.1)",
+                                        cursor: isClickable ? "pointer" : "default",
+                                        filter: isGreyedOut ? "none" : "brightness(1.1)",
                                       },
                                       pressed: { fill, outline: "none" },
                                     }}
@@ -382,24 +386,111 @@ export default function CanadaEvictionsScoringMap() {
                     </ComposableMap>
                   </div>
 
-                  {/* Legend */}
-                  <div className="mt-6 pt-6 border-t border-slate-200">
-                    <div className="flex items-start gap-4">
-                      <span className="text-sm font-semibold text-slate-700 pt-1.5">Score Legend:</span>
-                      <div className="flex flex-wrap gap-4">
-                        {[1, 2, 3, 4, 5].map(score => (
-                          <div key={score} className="inline-flex items-center gap-2.5 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
-                            <span
-                              className="inline-block w-6 h-6 rounded-md shadow-sm border border-white/50"
-                              style={{ backgroundColor: getScoreColor(score) }}
-                            ></span>
-                            <div className="flex items-baseline gap-1.5">
-                              <span className="font-bold text-slate-900">{score}</span>
-                              <span className="text-slate-600 text-sm">— {SCORE_DESCRIPTIONS[score]}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Comprehensive Legend */}
+                  <div className="mt-6 pt-6 border-t-2" style={{ borderColor: '#333f50' }}>
+                    <h3 className="text-lg font-bold mb-3" style={{ color: '#333f50' }}>Understanding the Scoring System</h3>
+                    <p className="text-sm text-slate-600 mb-4">
+                      Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
+                    </p>
+
+                    {/* Table Format */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-2 rounded-xl overflow-hidden" style={{ borderColor: '#333f50' }}>
+                        <thead>
+                          <tr style={{ backgroundColor: '#333f50' }}>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Description</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Examples</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-200">
+                          <tr className="hover:bg-green-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(5) }}
+                                >5</span>
+                                <span className="font-bold text-slate-900">Best</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Comprehensive protections that meet or exceed best practices
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Extended notice periods, mandatory good faith requirements, automatic stay of eviction, comprehensive rent control
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-lime-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(4) }}
+                                >4</span>
+                                <span className="font-bold text-slate-900">Strong</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Strong protections that meet best practice standards
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Adequate notice periods, accessible dispute hearings, compensation requirements, procedural transparency
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-yellow-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(3) }}
+                                >3</span>
+                                <span className="font-bold text-slate-900">Adequate</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Moderate protections that fall slightly below benchmarks
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Standard notice periods, moderate filing fees, some delay mechanisms, limited compensation requirements
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-orange-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(2) }}
+                                >2</span>
+                                <span className="font-bold text-slate-900">Weak</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Weak protections with limited procedural safeguards
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Short notice periods, high filing fees, limited compensation, barriers to appeals, gaps in coverage
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-red-50/50 transition-colors">
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
+                                  style={{ backgroundColor: getScoreColor(1) }}
+                                >1</span>
+                                <span className="font-bold text-slate-900">Minimal/None</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-700">
+                              Minimal or no protections for tenants
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-600">
+                              Immediate or very short notice, no hearing requirements, no rent control, major coverage exclusions, no compensation
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
               </div>
