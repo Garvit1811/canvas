@@ -501,7 +501,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="!max-w-[90vw] w-[90vw] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="!max-w-[90vw] w-[90vw]">
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
@@ -590,7 +590,7 @@ export default function CanadaEvictionsScoringMap() {
               {/* All Scores for This Province */}
               <div>
                 <h3 className="font-bold text-xl mb-4" style={{ color: '#333f50' }}>All Indicator Scores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {INDICATORS.map(indicator => {
                     const score = getProvinceScore(selectedProvince, indicator.id);
                     return (

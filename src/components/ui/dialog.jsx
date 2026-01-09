@@ -9,7 +9,7 @@ export function Dialog({ open, onOpenChange, children }) {
         className="fixed inset-0 bg-black/50"
         onClick={() => onOpenChange(false)}
       />
-      <div className="relative z-50 max-h-[85vh] overflow-y-auto">
+      <div className="relative z-50 max-h-[90vh] overflow-y-auto scroll-smooth scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-slate-100 hover:scrollbar-thumb-slate-500">
         {children}
       </div>
     </div>
