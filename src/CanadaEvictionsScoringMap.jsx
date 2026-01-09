@@ -501,7 +501,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           {selectedProvince && (
             <div className="space-y-6">
               <DialogHeader>
@@ -534,25 +534,50 @@ export default function CanadaEvictionsScoringMap() {
                     {getScoreExplanation(selectedIndicator.id, getRegionScore(selectedProvince))}
                   </p>
 
-                  {/* Detailed Rubric Breakdown */}
+                  {/* Scoring Scale with Rubric Criteria */}
                   {(() => {
                     const rubricCriteria = getRubricCriteria(selectedIndicator.id);
-                    const score = getRegionScore(selectedProvince);
-                    if (rubricCriteria && rubricCriteria[score]) {
-                      const criteria = rubricCriteria[score];
+                    const currentScore = getRegionScore(selectedProvince);
+                    if (rubricCriteria) {
                       return (
                         <div className="mt-4 p-4 bg-white rounded-lg border border-slate-200">
-                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">Rubric Criteria for this Score</div>
-                          <div className="space-y-2">
-                            {Object.entries(criteria).map(([key, value]) => (
-                              <div key={key} className="flex gap-3">
-                                <div className="flex-shrink-0 w-2 h-2 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
-                                <div className="flex-1">
-                                  <span className="font-semibold text-slate-700 text-sm capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
-                                  <span className="text-slate-600 text-sm">{value}</span>
+                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-4">Scoring Scale (1-5)</div>
+                          <div className="space-y-4">
+                            {[5, 4, 3, 2, 1].map(score => {
+                              const criteria = rubricCriteria[score];
+                              const isCurrentScore = score === currentScore;
+                              return (
+                                <div
+                                  key={score}
+                                  className={`p-3 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
+                                >
+                                  <div className="flex items-center gap-3 mb-2">
+                                    <div
+                                      className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                                      style={{ backgroundColor: getScoreColor(score) }}
+                                    >
+                                      {score}
+                                    </div>
+                                    {isCurrentScore && (
+                                      <span className="text-xs font-bold text-yellow-700 uppercase tracking-wider">Current Score</span>
+                                    )}
+                                  </div>
+                                  {criteria && (
+                                    <div className="space-y-1.5 ml-11">
+                                      {Object.entries(criteria).map(([key, value]) => (
+                                        <div key={key} className="flex gap-2">
+                                          <div className="flex-shrink-0 w-1.5 h-1.5 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
+                                          <div className="flex-1">
+                                            <span className="font-semibold text-slate-700 text-xs capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
+                                            <span className="text-slate-600 text-xs">{value}</span>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       );
