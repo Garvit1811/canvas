@@ -399,8 +399,8 @@ export default function CanadaEvictionsScoringMap() {
                         <thead>
                           <tr style={{ backgroundColor: '#333f50' }}>
                             <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Description</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Examples</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Measurement Criteria</th>
+                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Indicators</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-200">
