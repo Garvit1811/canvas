@@ -94,8 +94,8 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/20 to-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/30 to-blue-50/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
           <div className="rounded-2xl shadow-xl mb-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
@@ -113,41 +113,44 @@ export default function CanadaEvictionsScoringMap() {
           </div>
 
           {/* PDF Resources */}
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-4">
             {Object.entries(PDF_DOCUMENTS).map(([key, doc]) => (
               <a
                 key={key}
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 rounded-xl hover:shadow-md transition-all duration-200 text-sm font-medium text-slate-700 shadow-sm"
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-white border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-sm font-semibold shadow-md"
                 style={{
-                  borderColor: '#333f50',
+                  borderColor: '#c4a006',
+                  color: '#333f50',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#333f50';
+                  e.currentTarget.style.backgroundColor = '#c4a006';
                   e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
-                  e.currentTarget.style.color = '#334155';
+                  e.currentTarget.style.color = '#333f50';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
                 title={doc.description}
               >
                 <FileText className="h-4 w-4" />
                 {doc.title}
-                <Download className="h-3 w-3" />
+                <Download className="h-3.5 w-3.5" />
               </a>
             ))}
           </div>
         </header>
 
         {/* Top Section - Dropdowns and Current Indicator */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-8">
           {/* Left - Select Indicator Dropdown */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
+              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
               Select Indicator
             </h2>
             <div className="relative">
@@ -227,9 +230,9 @@ export default function CanadaEvictionsScoringMap() {
           </div>
 
           {/* Right - Jump to Province Dropdown */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
+              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
               Jump to Province
             </h2>
             <div className="relative">
@@ -282,9 +285,9 @@ export default function CanadaEvictionsScoringMap() {
         {/* Map Section - Full Width */}
         <div className="w-full">
           {/* Map */}
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-xl border-2 overflow-hidden" style={{ borderColor: 'rgba(51, 63, 80, 0.15)' }}>
               <div className="p-6">
-                <div className="w-full h-[560px] relative bg-slate-50/50 rounded-xl overflow-hidden">
+                <div className="w-full h-[560px] relative rounded-xl overflow-hidden border-2" style={{ backgroundColor: '#f8fafc', borderColor: 'rgba(196, 160, 6, 0.15)' }}>
                   {/* Zoom Controls */}
                   <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
                     <button
@@ -392,25 +395,28 @@ export default function CanadaEvictionsScoringMap() {
                   </div>
 
                   {/* Comprehensive Legend */}
-                  <div className="mt-6 pt-6 border-t-2" style={{ borderColor: '#333f50' }}>
-                    <h3 className="text-lg font-bold mb-3" style={{ color: '#333f50' }}>Understanding the Scoring System</h3>
-                    <p className="text-sm text-slate-600 mb-4">
+                  <div className="mt-8 pt-8 border-t-2" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
+                    <h3 className="text-xl font-bold mb-3 flex items-center gap-2" style={{ color: '#333f50' }}>
+                      <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
+                      Understanding the Scoring System
+                    </h3>
+                    <p className="text-base text-slate-600 mb-5 leading-relaxed">
                       Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
                     </p>
 
                     {/* Table Format */}
                     <div className="overflow-x-auto">
-                      <table className="w-full border-2 rounded-xl overflow-hidden" style={{ borderColor: '#333f50' }}>
+                      <table className="w-full border-2 rounded-xl overflow-hidden shadow-sm" style={{ borderColor: '#333f50' }}>
                         <thead>
-                          <tr style={{ backgroundColor: '#333f50' }}>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Measurement Criteria</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Indicators</th>
+                          <tr style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Measurement Criteria</th>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Indicators</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-200">
                           <tr className="hover:bg-green-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -419,15 +425,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Best</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Comprehensive protections that meet or exceed best practices
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Extended notice periods, mandatory good faith requirements, automatic stay of eviction, comprehensive rent control
                             </td>
                           </tr>
                           <tr className="hover:bg-lime-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -436,15 +442,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Strong</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Strong protections that meet best practice standards
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Adequate notice periods, accessible dispute hearings, compensation requirements, procedural transparency
                             </td>
                           </tr>
                           <tr className="hover:bg-yellow-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -453,15 +459,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Adequate</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Moderate protections that fall slightly below benchmarks
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Standard notice periods, moderate filing fees, some delay mechanisms, limited compensation requirements
                             </td>
                           </tr>
                           <tr className="hover:bg-orange-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -470,15 +476,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Weak</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Weak protections with limited procedural safeguards
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Short notice periods, high filing fees, limited compensation, barriers to appeals, gaps in coverage
                             </td>
                           </tr>
                           <tr className="hover:bg-red-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -487,10 +493,10 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Minimal/None</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Minimal or no protections for tenants
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Immediate or very short notice, no hearing requirements, no rent control, major coverage exclusions, no compensation
                             </td>
                           </tr>
