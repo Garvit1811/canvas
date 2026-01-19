@@ -19,7 +19,7 @@ export const INDICATORS = [
     id: "notice_termination",
     name: "Notice of Termination",
     shortName: "Notice",
-    description: "Required notice periods and termination procedures",
+    description: "The amount of advance notice landlords must provide before a tenancy can be terminated, varying by eviction type and reason.",
     scoreDescriptions: {
       1: "Minimal notice requirements; limited tenant protections",
       2: "Short notice periods; basic requirements",
@@ -32,7 +32,7 @@ export const INDICATORS = [
     id: "hearing_decision",
     name: "Hearing and Decision",
     shortName: "Hearing",
-    description: "Dispute period and hearing processes",
+    description: "The process through which disputes are heard and eviction decisions are made, including accessibility and timeliness.",
     scoreDescriptions: {
       1: "Less than one week to dispute; limited hearing access",
       2: "One week to dispute; basic hearing procedures",
@@ -45,7 +45,7 @@ export const INDICATORS = [
     id: "order_possession",
     name: "Order of Possession",
     shortName: "Possession",
-    description: "Process for obtaining and enforcing possession orders",
+    description: "The final legal stage of eviction, where a court or tribunal issues an order permitting physical removal of the tenant from the rental unit and enforcements.",
     scoreDescriptions: {
       1: "Streamlined for landlords; minimal tenant safeguards",
       2: "Landlord-favorable process; limited protections",
@@ -58,7 +58,7 @@ export const INDICATORS = [
     id: "rent_control",
     name: "Rent Control",
     shortName: "Rent Control",
-    description: "Rent increase caps and control mechanisms",
+    description: "Regulations that cap the annual percentage by which landlords can increase rent for occupied units, typically tied to inflation or cost indices, and whether increases are tied to the unit (vacancy control) or the tenant.",
     scoreDescriptions: {
       1: "No rent control",
       2: "Minimal controls; easily circumvented",
@@ -71,7 +71,7 @@ export const INDICATORS = [
     id: "above_guideline",
     name: "Above Guideline Increases",
     shortName: "AGI",
-    description: "Rules for rent increases above standard guidelines",
+    description: "The rules governing when and how landlords can apply for rent increases exceeding the annual allowable guideline, including the evidentiary requirements, review process, and tenant participation rights.",
     scoreDescriptions: {
       1: "No restrictions on above-guideline increases",
       2: "Minimal restrictions; easily obtained",
@@ -84,7 +84,7 @@ export const INDICATORS = [
     id: "eviction_types",
     name: "Eviction Types",
     shortName: "Eviction Types",
-    description: "Range and scope of allowable eviction reasons",
+    description: "The grounds on which a landlord can legally evict a tenant, including both at-fault (e.g., non-payment, damage, illegal activity) and no-fault (e.g., landlord use, demolition/renovation).",
     scoreDescriptions: {
       1: "Broad eviction grounds; minimal restrictions",
       2: "Wide eviction grounds; limited restrictions",
@@ -97,7 +97,7 @@ export const INDICATORS = [
     id: "compensation",
     name: "Compensation",
     shortName: "Compensation",
-    description: "Required compensation for certain evictions",
+    description: "The financial remedies available to tenants evicted for no-fault reasons such as landlord use, property sale, or planned demolition/renovation.",
     scoreDescriptions: {
       1: "No compensation required",
       2: "Minimal compensation in limited circumstances",
@@ -110,7 +110,7 @@ export const INDICATORS = [
     id: "appeals",
     name: "Appeals",
     shortName: "Appeals",
-    description: "Appeal and review processes available",
+    description: "The ability to challenge eviction decisions through a higher review process, including availability, cost, timelines, and automatic stay provisions.",
     scoreDescriptions: {
       1: "No appeal mechanism; judicial review only",
       2: "Limited appeal rights; restrictive process",
@@ -123,7 +123,7 @@ export const INDICATORS = [
     id: "onus_filing",
     name: "Onus and Filing Fee",
     shortName: "Onus & Fees",
-    description: "Who must file and associated costs",
+    description: "The allocation of legal responsibility and financial burden in eviction proceedings and the cost of filing.",
     scoreDescriptions: {
       1: "Tenant must file; high fees with no waivers",
       2: "Tenant must file; moderate fees with limited waivers",
@@ -136,7 +136,7 @@ export const INDICATORS = [
     id: "conditional_orders",
     name: "Conditional Orders",
     shortName: "Conditional",
-    description: "Availability of conditional eviction orders",
+    description: "Orders that allow tenants facing eviction (particularly for non-payment or remediable breaches) to remain if specific conditions are met, such as paying arrears by a set date or correcting lease violations including payments.",
     scoreDescriptions: {
       1: "No conditional orders available",
       2: "Limited conditional orders; rarely granted",

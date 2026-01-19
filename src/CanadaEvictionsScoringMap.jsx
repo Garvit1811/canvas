@@ -522,7 +522,7 @@ export default function CanadaEvictionsScoringMap() {
                       className="text-4xl font-bold text-white px-4 py-2 rounded-xl inline-block shadow-md"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
                     >
-                      {getRegionScore(selectedProvince)}
+                      {getRegionScore(selectedProvince)} / 5
                     </div>
                   </div>
                 </div>
