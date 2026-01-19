@@ -567,7 +567,7 @@ export default function CanadaEvictionsScoringMap() {
                             className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
                             style={{ backgroundColor: getScoreColor(score) }}
                           >
-                            {score}
+                            {score} / 5
                           </div>
                         </div>
                       </button>
