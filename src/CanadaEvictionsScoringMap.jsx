@@ -638,14 +638,13 @@ export default function CanadaEvictionsScoringMap() {
                       className="text-4xl font-bold text-white px-4 py-2 rounded-xl inline-block shadow-md"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
                     >
-                      {getRegionScore(selectedProvince)} / 5
+                      {getRegionScore(selectedProvince)}/5
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
-                  <p className="text-sm text-slate-700 leading-relaxed mb-4">
                   <p className="text-sm text-slate-700 leading-relaxed">
                     {selectedIndicator.description}
                   </p>
@@ -720,11 +719,6 @@ export default function CanadaEvictionsScoringMap() {
                                   </div>
                                 );
                               })}
-                          <div
-                            className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
-                            style={{ backgroundColor: getScoreColor(score) }}
-                          >
-                            {score} / 5
                           </div>
                         </div>
                       );
