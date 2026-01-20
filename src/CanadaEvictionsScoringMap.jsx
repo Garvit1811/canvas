@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
@@ -68,7 +68,30 @@ export default function CanadaEvictionsScoringMap() {
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
   const [indicatorDropdownOpen, setIndicatorDropdownOpen] = useState(false);
   const [showAllScoreLevels, setShowAllScoreLevels] = useState(false);
-  const [showAllIndicators, setShowAllIndicators] = useState(false);
+  const [showAllIndicators, setShowAllIndicators] = useState(true);
+  const [mapLoading, setMapLoading] = useState(true);
+  const [hoveredProvince, setHoveredProvince] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showHint, setShowHint] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem('mapHintDismissed');
+    }
+    return false;
+  });
+  const [showLegend, setShowLegend] = useState(true);
+
+  // Auto-dismiss hint after 3 seconds
+  useEffect(() => {
+    if (showHint) {
+      const timer = setTimeout(() => {
+        setShowHint(false);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('mapHintDismissed', 'true');
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showHint]);
 
   // Get score for a province based on selected indicator
   const getRegionScore = (provinceId) => {
@@ -339,6 +362,45 @@ export default function CanadaEvictionsScoringMap() {
                     </button>
                   </div>
 
+                  {/* Loading State */}
+                  {mapLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-50 z-20">
+                      <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#c4a006] mb-3"></div>
+                        <div className="text-slate-600 font-semibold">Loading map...</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* First-Time User Hint */}
+                  {showHint && !mapLoading && (
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 animate-pulse pointer-events-none">
+                      <div className="px-6 py-3 rounded-xl shadow-2xl" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                        <div className="text-white text-base font-semibold">
+                          👆 Click provinces to explore details
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Hover Tooltip */}
+                  {hoveredProvince && !mapLoading && (
+                    <div
+                      className="absolute z-30 px-3 py-2 rounded-lg shadow-lg pointer-events-none"
+                      style={{
+                        left: mousePosition.x + 10,
+                        top: mousePosition.y + 10,
+                        backgroundColor: '#333f50',
+                        color: 'white'
+                      }}
+                    >
+                      <div className="text-sm font-bold">{PROVINCE_NAMES[hoveredProvince]}</div>
+                      <div className="text-xs" style={{ color: '#c4a006' }}>
+                        Score: {getRegionScore(hoveredProvince)}/5
+                      </div>
+                    </div>
+                  )}
+
                     <ComposableMap
                       projection="geoEqualEarth"
                       projectionConfig={{ scale: 650, center: [-96, 61] }}
@@ -349,48 +411,75 @@ export default function CanadaEvictionsScoringMap() {
                     >
                       <ZoomableGroup center={center} zoom={zoom} onMoveEnd={({ coordinates, zoom }) => { setCenter(coordinates); setZoom(zoom); }}>
                         <Geographies geography={GEO_URL}>
-                          {({ geographies }) => (
-                            <>
-                              {geographies.map((geo) => {
-                                const p = geo.properties || {};
-                                const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
-                                const name = String(rawName);
-                                const id = NAME_TO_ID[name];
+                          {({ geographies }) => {
+                            // Set loading to false once geographies are loaded
+                            if (mapLoading) {
+                              setTimeout(() => setMapLoading(false), 100);
+                            }
 
-                                // Grey out territories without data (NT, NU)
-                                const isGreyedOut = id && ['NT', 'NU'].includes(id);
-                                const score = id && !isGreyedOut ? getRegionScore(id) : null;
-                                const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
-                                const isClickable = id && !isGreyedOut;
+                            return (
+                              <>
+                                {geographies.map((geo) => {
+                                  const p = geo.properties || {};
+                                  const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
+                                  const name = String(rawName);
+                                  const id = NAME_TO_ID[name];
 
-                                return (
-                                  <Geography
-                                    key={geo.rsmKey}
-                                    geography={geo}
-                                    onClick={() => isClickable && onSelectProvince(id)}
-                                    style={{
-                                      default: {
-                                        fill,
-                                        stroke: "#ffffff",
-                                        strokeWidth: 1.5,
-                                        outline: "none",
-                                        cursor: isClickable ? "pointer" : "default",
-                                      },
-                                      hover: {
-                                        fill: isGreyedOut ? fill : fill,
-                                        stroke: isGreyedOut ? "#ffffff" : "#111111",
-                                        strokeWidth: isGreyedOut ? 1.5 : 2,
-                                        outline: "none",
-                                        cursor: isClickable ? "pointer" : "default",
-                                        filter: isGreyedOut ? "none" : "brightness(1.1)",
-                                      },
-                                      pressed: { fill, outline: "none" },
-                                    }}
-                                  />
-                                );
-                              })}
-                            </>
-                          )}
+                                  // Grey out territories without data (NT, NU)
+                                  const isGreyedOut = id && ['NT', 'NU'].includes(id);
+                                  const score = id && !isGreyedOut ? getRegionScore(id) : null;
+                                  const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
+                                  const isClickable = id && !isGreyedOut;
+
+                                  return (
+                                    <Geography
+                                      key={geo.rsmKey}
+                                      geography={geo}
+                                      onClick={() => isClickable && onSelectProvince(id)}
+                                      onMouseEnter={(e) => {
+                                        if (isClickable) {
+                                          setHoveredProvince(id);
+                                        }
+                                      }}
+                                      onMouseMove={(e) => {
+                                        if (isClickable) {
+                                          const container = e.currentTarget.closest('.w-full.h-full');
+                                          if (container) {
+                                            const rect = container.getBoundingClientRect();
+                                            setMousePosition({
+                                              x: e.clientX - rect.left,
+                                              y: e.clientY - rect.top
+                                            });
+                                          }
+                                        }
+                                      }}
+                                      onMouseLeave={() => {
+                                        setHoveredProvince(null);
+                                      }}
+                                      style={{
+                                        default: {
+                                          fill,
+                                          stroke: "#ffffff",
+                                          strokeWidth: 1.5,
+                                          outline: "none",
+                                          cursor: isClickable ? "pointer" : "default",
+                                        },
+                                        hover: {
+                                          fill: isGreyedOut ? fill : fill,
+                                          stroke: isGreyedOut ? "#ffffff" : "#111111",
+                                          strokeWidth: isGreyedOut ? 1.5 : 2,
+                                          outline: "none",
+                                          cursor: isClickable ? "pointer" : "default",
+                                          filter: isGreyedOut ? "none" : "brightness(1.1)",
+                                        },
+                                        pressed: { fill, outline: "none" },
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </>
+                            );
+                          }}
                         </Geographies>
                       </ZoomableGroup>
                     </ComposableMap>
@@ -398,16 +487,27 @@ export default function CanadaEvictionsScoringMap() {
 
                   {/* Comprehensive Legend */}
                   <div className="mt-8 pt-8 border-t-2" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
-                    <h3 className="text-xl font-bold mb-3 flex items-center gap-2" style={{ color: '#333f50' }}>
-                      <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
-                      Understanding the Scoring System
-                    </h3>
-                    <p className="text-base text-slate-600 mb-5 leading-relaxed">
-                      Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
-                    </p>
+                    <button
+                      onClick={() => setShowLegend(!showLegend)}
+                      className="w-full flex items-center justify-between mb-3 lg:cursor-default"
+                    >
+                      <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#333f50' }}>
+                        <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
+                        Understanding the Scoring System
+                      </h3>
+                      <ChevronDown
+                        className={`h-5 w-5 transition-transform duration-200 lg:hidden ${showLegend ? 'rotate-180' : ''}`}
+                        style={{ color: '#c4a006' }}
+                      />
+                    </button>
 
-                    {/* Table Format */}
-                    <div className="overflow-x-auto">
+                    <div className={`${showLegend ? 'block' : 'hidden'} lg:block`}>
+                      <p className="text-base text-slate-600 mb-5 leading-relaxed">
+                        Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
+                      </p>
+
+                      {/* Table Format */}
+                      <div className="overflow-x-auto">
                       <table className="w-full border-2 rounded-xl overflow-hidden shadow-sm" style={{ borderColor: '#333f50' }}>
                         <thead>
                           <tr style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
@@ -505,6 +605,7 @@ export default function CanadaEvictionsScoringMap() {
                         </tbody>
                       </table>
                     </div>
+                    </div>
                   </div>
               </div>
             </div>
@@ -537,7 +638,7 @@ export default function CanadaEvictionsScoringMap() {
                       className="text-4xl font-bold text-white px-4 py-2 rounded-xl inline-block shadow-md"
                       style={{ backgroundColor: getScoreColor(getRegionScore(selectedProvince)) }}
                     >
-                      {getRegionScore(selectedProvince)}
+                      {getRegionScore(selectedProvince)} / 5
                     </div>
                   </div>
                 </div>
@@ -545,6 +646,7 @@ export default function CanadaEvictionsScoringMap() {
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
                   <p className="text-sm text-slate-700 leading-relaxed mb-4">
+                  <p className="text-sm text-slate-700 leading-relaxed">
                     {selectedIndicator.description}
                   </p>
 
@@ -618,6 +720,11 @@ export default function CanadaEvictionsScoringMap() {
                                   </div>
                                 );
                               })}
+                          <div
+                            className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
+                            style={{ backgroundColor: getScoreColor(score) }}
+                          >
+                            {score} / 5
                           </div>
                         </div>
                       );
@@ -628,23 +735,32 @@ export default function CanadaEvictionsScoringMap() {
               </div>
 
               {/* All Scores for This Province */}
-              <div className="rounded-xl border-2 overflow-hidden transition-all duration-200" style={{ borderColor: 'rgba(51, 63, 80, 0.2)' }}>
+              <div className="rounded-xl border-2 overflow-hidden transition-all duration-200 hover:shadow-md" style={{ borderColor: showAllIndicators ? '#c4a006' : 'rgba(51, 63, 80, 0.2)' }}>
                 <button
                   onClick={() => setShowAllIndicators(!showAllIndicators)}
-                  className="w-full px-5 py-4 flex items-center justify-between transition-all duration-200"
+                  className="w-full px-5 py-4 flex items-center justify-between transition-all duration-200 cursor-pointer"
                   style={{
                     backgroundColor: showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
+                    e.currentTarget.closest('div').style.borderColor = '#c4a006';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)';
+                    e.currentTarget.closest('div').style.borderColor = showAllIndicators ? '#c4a006' : 'rgba(51, 63, 80, 0.2)';
                   }}
                 >
-                  <h3 className="font-bold text-xl" style={{ color: '#333f50' }}>All Indicator Scores</h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-xl" style={{ color: '#333f50' }}>All Indicator Scores</h3>
+                    {!showAllIndicators && (
+                      <span className="px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#c4a006' }}>
+                        10
+                      </span>
+                    )}
+                  </div>
                   <ChevronDown
-                    className={`h-5 w-5 transition-transform duration-200 ${showAllIndicators ? 'rotate-180' : ''}`}
+                    className={`h-6 w-6 transition-transform duration-200 ${showAllIndicators ? 'rotate-180' : ''}`}
                     style={{ color: '#c4a006' }}
                   />
                 </button>
