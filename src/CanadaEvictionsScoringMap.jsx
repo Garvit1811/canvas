@@ -67,6 +67,8 @@ export default function CanadaEvictionsScoringMap() {
   const [zoom, setZoom] = useState(1);
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
   const [indicatorDropdownOpen, setIndicatorDropdownOpen] = useState(false);
+  const [showAllScoreLevels, setShowAllScoreLevels] = useState(false);
+  const [showAllIndicators, setShowAllIndicators] = useState(false);
 
   // Get score for a province based on selected indicator
   const getRegionScore = (provinceId) => {
@@ -511,7 +513,7 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="!max-w-[90vw] w-[90vw] !p-0 !rounded-2xl overflow-hidden">
+        <DialogContent className="!max-w-4xl w-full mx-auto !p-0 !rounded-2xl overflow-hidden">
           {selectedProvince && (
             <div className="space-y-0">
               <DialogHeader className="!mb-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
@@ -553,43 +555,69 @@ export default function CanadaEvictionsScoringMap() {
                     if (rubricCriteria) {
                       return (
                         <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200">
-                          <div className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2.5">Scoring Scale (1-5)</div>
+                          <div className="flex items-center justify-between mb-2.5">
+                            <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Scoring Scale (1-5)</div>
+                            <button
+                              onClick={() => setShowAllScoreLevels(!showAllScoreLevels)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 border-2"
+                              style={{
+                                backgroundColor: showAllScoreLevels ? '#c4a006' : 'rgba(196, 160, 6, 0.1)',
+                                borderColor: '#c4a006',
+                                color: showAllScoreLevels ? 'white' : '#333f50'
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!showAllScoreLevels) {
+                                  e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.2)';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!showAllScoreLevels) {
+                                  e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                                }
+                              }}
+                            >
+                              <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${showAllScoreLevels ? 'rotate-180' : ''}`} />
+                              {showAllScoreLevels ? 'Hide Levels' : 'View All Levels'}
+                            </button>
+                          </div>
                           <div className="space-y-2.5">
-                            {[5, 4, 3, 2, 1].map(score => {
-                              const criteria = rubricCriteria[score];
-                              const isCurrentScore = score === currentScore;
-                              return (
-                                <div
-                                  key={score}
-                                  className={`p-2.5 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
-                                >
-                                  <div className="flex items-center gap-2.5 mb-1.5">
-                                    <div
-                                      className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                                      style={{ backgroundColor: getScoreColor(score) }}
-                                    >
-                                      {score}
+                            {[5, 4, 3, 2, 1]
+                              .filter(score => showAllScoreLevels || score === currentScore)
+                              .map(score => {
+                                const criteria = rubricCriteria[score];
+                                const isCurrentScore = score === currentScore;
+                                return (
+                                  <div
+                                    key={score}
+                                    className={`p-2.5 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
+                                  >
+                                    <div className="flex items-center gap-2.5 mb-1.5">
+                                      <div
+                                        className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                                        style={{ backgroundColor: getScoreColor(score) }}
+                                      >
+                                        {score}
+                                      </div>
+                                      {isCurrentScore && (
+                                        <span className="text-xs font-bold text-yellow-700 uppercase tracking-wider">Current Score</span>
+                                      )}
                                     </div>
-                                    {isCurrentScore && (
-                                      <span className="text-xs font-bold text-yellow-700 uppercase tracking-wider">Current Score</span>
+                                    {criteria && (
+                                      <div className="space-y-1 ml-9">
+                                        {Object.entries(criteria).map(([key, value]) => (
+                                          <div key={key} className="flex gap-2 items-start">
+                                            <div className="flex-shrink-0 w-1 h-1 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
+                                            <div className="flex-1 text-xs leading-tight">
+                                              <span className="font-semibold text-slate-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
+                                              <span className="text-slate-600">{value}</span>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
                                     )}
                                   </div>
-                                  {criteria && (
-                                    <div className="space-y-1 ml-9">
-                                      {Object.entries(criteria).map(([key, value]) => (
-                                        <div key={key} className="flex gap-2 items-start">
-                                          <div className="flex-shrink-0 w-1 h-1 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
-                                          <div className="flex-1 text-xs leading-tight">
-                                            <span className="font-semibold text-slate-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
-                                            <span className="text-slate-600">{value}</span>
-                                          </div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
+                                );
+                              })}
                           </div>
                         </div>
                       );
@@ -600,43 +628,65 @@ export default function CanadaEvictionsScoringMap() {
               </div>
 
               {/* All Scores for This Province */}
-              <div>
-                <h3 className="font-bold text-xl mb-4" style={{ color: '#333f50' }}>All Indicator Scores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {INDICATORS.map(indicator => {
-                    const score = getProvinceScore(selectedProvince, indicator.id);
-                    return (
-                      <button
-                        key={indicator.id}
-                        onClick={() => {
-                          setSelectedIndicator(indicator);
-                        }}
-                        className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#c4a006';
-                          e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
-                            <div className="text-xs text-slate-600 mt-1 line-clamp-2">{indicator.description}</div>
-                          </div>
-                          <div
-                            className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
-                            style={{ backgroundColor: getScoreColor(score) }}
+              <div className="rounded-xl border-2 overflow-hidden transition-all duration-200" style={{ borderColor: 'rgba(51, 63, 80, 0.2)' }}>
+                <button
+                  onClick={() => setShowAllIndicators(!showAllIndicators)}
+                  className="w-full px-5 py-4 flex items-center justify-between transition-all duration-200"
+                  style={{
+                    backgroundColor: showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)';
+                  }}
+                >
+                  <h3 className="font-bold text-xl" style={{ color: '#333f50' }}>All Indicator Scores</h3>
+                  <ChevronDown
+                    className={`h-5 w-5 transition-transform duration-200 ${showAllIndicators ? 'rotate-180' : ''}`}
+                    style={{ color: '#c4a006' }}
+                  />
+                </button>
+                {showAllIndicators && (
+                  <div className="p-5 border-t-2" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {INDICATORS.map(indicator => {
+                        const score = getProvinceScore(selectedProvince, indicator.id);
+                        return (
+                          <button
+                            key={indicator.id}
+                            onClick={() => {
+                              setSelectedIndicator(indicator);
+                            }}
+                            className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = '#c4a006';
+                              e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = '#e2e8f0';
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
                           >
-                            {score}/5
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
+                                <div className="text-xs text-slate-600 mt-1 line-clamp-2">{indicator.description}</div>
+                              </div>
+                              <div
+                                className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
+                                style={{ backgroundColor: getScoreColor(score) }}
+                              >
+                                {score}/5
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Resources */}
