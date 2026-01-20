@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Card, CardContent } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
@@ -11,7 +11,8 @@ import {
   getProvinceScore,
   getScoreExplanation,
   getScoreColor,
-  SCORE_DESCRIPTIONS
+  SCORE_DESCRIPTIONS,
+  getRubricCriteria
 } from "./data/indicatorScores";
 
 /**
@@ -66,6 +67,31 @@ export default function CanadaEvictionsScoringMap() {
   const [zoom, setZoom] = useState(1);
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
   const [indicatorDropdownOpen, setIndicatorDropdownOpen] = useState(false);
+  const [showAllScoreLevels, setShowAllScoreLevels] = useState(false);
+  const [showAllIndicators, setShowAllIndicators] = useState(true);
+  const [mapLoading, setMapLoading] = useState(true);
+  const [hoveredProvince, setHoveredProvince] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showHint, setShowHint] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem('mapHintDismissed');
+    }
+    return false;
+  });
+  const [showLegend, setShowLegend] = useState(true);
+
+  // Auto-dismiss hint after 3 seconds
+  useEffect(() => {
+    if (showHint) {
+      const timer = setTimeout(() => {
+        setShowHint(false);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('mapHintDismissed', 'true');
+        }
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showHint]);
 
   // Get score for a province based on selected indicator
   const getRegionScore = (provinceId) => {
@@ -93,56 +119,63 @@ export default function CanadaEvictionsScoringMap() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/20 to-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="w-full min-h-screen" style={{ background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #b0c4de 100%)' }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-extrabold mb-3 tracking-tight" style={{ color: '#333f50' }}>
-              Canada Eviction Law Comparison
-            </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Interactive analysis of provincial eviction laws across 10 key indicators.
-              Compare tenant protections and procedural safeguards nationwide.
-            </p>
+          <div className="rounded-2xl shadow-xl mb-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+            <div className="text-center px-8 py-10">
+              <h1 className="text-5xl font-extrabold mb-4 tracking-tight text-white">
+                Canadian Provincial Eviction Process Comparison
+              </h1>
+              <p className="text-xl mb-4 max-w-4xl mx-auto leading-relaxed" style={{ color: '#c4a006' }}>
+                An interactive tool to understand and compare tenant protections across Canadian provinces
+              </p>
+              <p className="text-base text-slate-200 max-w-4xl mx-auto leading-relaxed">
+                Eviction laws determine how and when landlords can remove tenants from rental housing. These laws vary significantly across Canada, affecting millions of renters. This tool evaluates each province across 10 key indicators—including notice periods, hearing processes, rent control, and appeal rights—using a 5-point scale. Higher scores indicate stronger tenant protections. Use the map and indicators below to explore how your province compares and understand what protections exist for renters in different regions.
+              </p>
+            </div>
           </div>
 
           {/* PDF Resources */}
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-4">
             {Object.entries(PDF_DOCUMENTS).map(([key, doc]) => (
               <a
                 key={key}
                 href={doc.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-slate-200 rounded-xl hover:shadow-md transition-all duration-200 text-sm font-medium text-slate-700 shadow-sm"
+                className="inline-flex items-center gap-2.5 px-6 py-3 bg-white border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-sm font-semibold shadow-md"
                 style={{
-                  borderColor: '#333f50',
+                  borderColor: '#c4a006',
+                  color: '#333f50',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#333f50';
+                  e.currentTarget.style.backgroundColor = '#c4a006';
                   e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'white';
-                  e.currentTarget.style.color = '#334155';
+                  e.currentTarget.style.color = '#333f50';
+                  e.currentTarget.style.transform = 'translateY(0)';
                 }}
                 title={doc.description}
               >
                 <FileText className="h-4 w-4" />
                 {doc.title}
-                <Download className="h-3 w-3" />
+                <Download className="h-3.5 w-3.5" />
               </a>
             ))}
           </div>
         </header>
 
         {/* Top Section - Dropdowns and Current Indicator */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-8">
           {/* Left - Select Indicator Dropdown */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
+              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
               Select Indicator
             </h2>
             <div className="relative">
@@ -222,9 +255,9 @@ export default function CanadaEvictionsScoringMap() {
           </div>
 
           {/* Right - Jump to Province Dropdown */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200/60 p-5">
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2" style={{ color: '#333f50' }}>
-              <div className="w-1 h-5 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
+              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
               Jump to Province
             </h2>
             <div className="relative">
@@ -277,9 +310,9 @@ export default function CanadaEvictionsScoringMap() {
         {/* Map Section - Full Width */}
         <div className="w-full">
           {/* Map */}
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200/60 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-xl border-2 overflow-hidden" style={{ borderColor: 'rgba(51, 63, 80, 0.15)' }}>
               <div className="p-6">
-                <div className="w-full h-[560px] relative bg-slate-50/50 rounded-xl overflow-hidden">
+                <div className="w-full h-[560px] relative rounded-xl overflow-hidden border-2" style={{ backgroundColor: '#f8fafc', borderColor: 'rgba(196, 160, 6, 0.15)' }}>
                   {/* Zoom Controls */}
                   <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
                     <button
@@ -329,6 +362,45 @@ export default function CanadaEvictionsScoringMap() {
                     </button>
                   </div>
 
+                  {/* Loading State */}
+                  {mapLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-50 z-20">
+                      <div className="text-center">
+                        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#c4a006] mb-3"></div>
+                        <div className="text-slate-600 font-semibold">Loading map...</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* First-Time User Hint */}
+                  {showHint && !mapLoading && (
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 animate-pulse pointer-events-none">
+                      <div className="px-6 py-3 rounded-xl shadow-2xl" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                        <div className="text-white text-base font-semibold">
+                          👆 Click provinces to explore details
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Hover Tooltip */}
+                  {hoveredProvince && !mapLoading && (
+                    <div
+                      className="absolute z-30 px-3 py-2 rounded-lg shadow-lg pointer-events-none"
+                      style={{
+                        left: mousePosition.x + 10,
+                        top: mousePosition.y + 10,
+                        backgroundColor: '#333f50',
+                        color: 'white'
+                      }}
+                    >
+                      <div className="text-sm font-bold">{PROVINCE_NAMES[hoveredProvince]}</div>
+                      <div className="text-xs" style={{ color: '#c4a006' }}>
+                        Score: {getRegionScore(hoveredProvince)}/5
+                      </div>
+                    </div>
+                  )}
+
                     <ComposableMap
                       projection="geoEqualEarth"
                       projectionConfig={{ scale: 650, center: [-96, 61] }}
@@ -339,73 +411,114 @@ export default function CanadaEvictionsScoringMap() {
                     >
                       <ZoomableGroup center={center} zoom={zoom} onMoveEnd={({ coordinates, zoom }) => { setCenter(coordinates); setZoom(zoom); }}>
                         <Geographies geography={GEO_URL}>
-                          {({ geographies }) => (
-                            <>
-                              {geographies.map((geo) => {
-                                const p = geo.properties || {};
-                                const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
-                                const name = String(rawName);
-                                const id = NAME_TO_ID[name];
+                          {({ geographies }) => {
+                            // Set loading to false once geographies are loaded
+                            if (mapLoading) {
+                              setTimeout(() => setMapLoading(false), 100);
+                            }
 
-                                // Grey out territories without data (NT, NU)
-                                const isGreyedOut = id && ['NT', 'NU'].includes(id);
-                                const score = id && !isGreyedOut ? getRegionScore(id) : null;
-                                const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
-                                const isClickable = id && !isGreyedOut;
+                            return (
+                              <>
+                                {geographies.map((geo) => {
+                                  const p = geo.properties || {};
+                                  const rawName = p.PRENAME || p.name || p.NAME || (p.PRNAME ? String(p.PRNAME).split("/")[0].trim() : geo.id);
+                                  const name = String(rawName);
+                                  const id = NAME_TO_ID[name];
 
-                                return (
-                                  <Geography
-                                    key={geo.rsmKey}
-                                    geography={geo}
-                                    onClick={() => isClickable && onSelectProvince(id)}
-                                    style={{
-                                      default: {
-                                        fill,
-                                        stroke: "#ffffff",
-                                        strokeWidth: 1.5,
-                                        outline: "none",
-                                        cursor: isClickable ? "pointer" : "default",
-                                      },
-                                      hover: {
-                                        fill: isGreyedOut ? fill : fill,
-                                        stroke: isGreyedOut ? "#ffffff" : "#111111",
-                                        strokeWidth: isGreyedOut ? 1.5 : 2,
-                                        outline: "none",
-                                        cursor: isClickable ? "pointer" : "default",
-                                        filter: isGreyedOut ? "none" : "brightness(1.1)",
-                                      },
-                                      pressed: { fill, outline: "none" },
-                                    }}
-                                  />
-                                );
-                              })}
-                            </>
-                          )}
+                                  // Grey out territories without data (NT, NU)
+                                  const isGreyedOut = id && ['NT', 'NU'].includes(id);
+                                  const score = id && !isGreyedOut ? getRegionScore(id) : null;
+                                  const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
+                                  const isClickable = id && !isGreyedOut;
+
+                                  return (
+                                    <Geography
+                                      key={geo.rsmKey}
+                                      geography={geo}
+                                      onClick={() => isClickable && onSelectProvince(id)}
+                                      onMouseEnter={(e) => {
+                                        if (isClickable) {
+                                          setHoveredProvince(id);
+                                        }
+                                      }}
+                                      onMouseMove={(e) => {
+                                        if (isClickable) {
+                                          const container = e.currentTarget.closest('.w-full.h-full');
+                                          if (container) {
+                                            const rect = container.getBoundingClientRect();
+                                            setMousePosition({
+                                              x: e.clientX - rect.left,
+                                              y: e.clientY - rect.top
+                                            });
+                                          }
+                                        }
+                                      }}
+                                      onMouseLeave={() => {
+                                        setHoveredProvince(null);
+                                      }}
+                                      style={{
+                                        default: {
+                                          fill,
+                                          stroke: "#ffffff",
+                                          strokeWidth: 1.5,
+                                          outline: "none",
+                                          cursor: isClickable ? "pointer" : "default",
+                                        },
+                                        hover: {
+                                          fill: isGreyedOut ? fill : fill,
+                                          stroke: isGreyedOut ? "#ffffff" : "#111111",
+                                          strokeWidth: isGreyedOut ? 1.5 : 2,
+                                          outline: "none",
+                                          cursor: isClickable ? "pointer" : "default",
+                                          filter: isGreyedOut ? "none" : "brightness(1.1)",
+                                        },
+                                        pressed: { fill, outline: "none" },
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </>
+                            );
+                          }}
                         </Geographies>
                       </ZoomableGroup>
                     </ComposableMap>
                   </div>
 
                   {/* Comprehensive Legend */}
-                  <div className="mt-6 pt-6 border-t-2" style={{ borderColor: '#333f50' }}>
-                    <h3 className="text-lg font-bold mb-3" style={{ color: '#333f50' }}>Understanding the Scoring System</h3>
-                    <p className="text-sm text-slate-600 mb-4">
-                      Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
-                    </p>
+                  <div className="mt-8 pt-8 border-t-2" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
+                    <button
+                      onClick={() => setShowLegend(!showLegend)}
+                      className="w-full flex items-center justify-between mb-3 lg:cursor-default"
+                    >
+                      <h3 className="text-xl font-bold flex items-center gap-2" style={{ color: '#333f50' }}>
+                        <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
+                        Understanding the Scoring System
+                      </h3>
+                      <ChevronDown
+                        className={`h-5 w-5 transition-transform duration-200 lg:hidden ${showLegend ? 'rotate-180' : ''}`}
+                        style={{ color: '#c4a006' }}
+                      />
+                    </button>
 
-                    {/* Table Format */}
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-2 rounded-xl overflow-hidden" style={{ borderColor: '#333f50' }}>
+                    <div className={`${showLegend ? 'block' : 'hidden'} lg:block`}>
+                      <p className="text-base text-slate-600 mb-5 leading-relaxed">
+                        Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
+                      </p>
+
+                      {/* Table Format */}
+                      <div className="overflow-x-auto">
+                      <table className="w-full border-2 rounded-xl overflow-hidden shadow-sm" style={{ borderColor: '#333f50' }}>
                         <thead>
-                          <tr style={{ backgroundColor: '#333f50' }}>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Description</th>
-                            <th className="px-4 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Examples</th>
+                          <tr style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Score</th>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Measurement Criteria</th>
+                            <th className="px-5 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Indicators</th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-200">
                           <tr className="hover:bg-green-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -414,15 +527,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Best</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Comprehensive protections that meet or exceed best practices
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Extended notice periods, mandatory good faith requirements, automatic stay of eviction, comprehensive rent control
                             </td>
                           </tr>
                           <tr className="hover:bg-lime-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -431,15 +544,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Strong</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Strong protections that meet best practice standards
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Adequate notice periods, accessible dispute hearings, compensation requirements, procedural transparency
                             </td>
                           </tr>
                           <tr className="hover:bg-yellow-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -448,15 +561,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Adequate</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Moderate protections that fall slightly below benchmarks
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Standard notice periods, moderate filing fees, some delay mechanisms, limited compensation requirements
                             </td>
                           </tr>
                           <tr className="hover:bg-orange-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -465,15 +578,15 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Weak</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Weak protections with limited procedural safeguards
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Short notice periods, high filing fees, limited compensation, barriers to appeals, gaps in coverage
                             </td>
                           </tr>
                           <tr className="hover:bg-red-50/50 transition-colors">
-                            <td className="px-4 py-3 whitespace-nowrap">
+                            <td className="px-5 py-4 whitespace-nowrap">
                               <div className="flex items-center gap-2">
                                 <span
                                   className="w-8 h-8 rounded-lg shadow-sm flex items-center justify-center text-white font-bold"
@@ -482,15 +595,16 @@ export default function CanadaEvictionsScoringMap() {
                                 <span className="font-bold text-slate-900">Minimal/None</span>
                               </div>
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-700">
+                            <td className="px-5 py-4 text-sm text-slate-700">
                               Minimal or no protections for tenants
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-600">
+                            <td className="px-5 py-4 text-sm text-slate-600">
                               Immediate or very short notice, no hearing requirements, no rent control, major coverage exclusions, no compensation
                             </td>
                           </tr>
                         </tbody>
                       </table>
+                    </div>
                     </div>
                   </div>
               </div>
@@ -500,15 +614,17 @@ export default function CanadaEvictionsScoringMap() {
 
       {/* Province Details Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="!max-w-4xl w-full mx-auto !p-0 !rounded-2xl overflow-hidden">
           {selectedProvince && (
-            <div className="space-y-6">
-              <DialogHeader>
-                <DialogTitle className="text-2xl">
-                  <span>{PROVINCE_NAMES[selectedProvince]}</span>
+            <div className="space-y-0">
+              <DialogHeader className="!mb-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+                <DialogTitle className="px-8 py-8">
+                  <div className="text-4xl font-extrabold text-white mb-2">{PROVINCE_NAMES[selectedProvince]}</div>
+                  <div className="text-base font-semibold tracking-wide" style={{ color: '#c4a006' }}>Provincial Eviction Score Breakdown</div>
                 </DialogTitle>
               </DialogHeader>
 
+              <div className="px-8 py-6 space-y-6">
               {/* Current Indicator Score Details */}
               <div className="rounded-xl p-5 border-2 shadow-sm" style={{ backgroundColor: 'rgba(51, 63, 80, 0.04)', borderColor: '#333f50' }}>
                 <div className="flex items-start justify-between mb-4">
@@ -529,40 +645,81 @@ export default function CanadaEvictionsScoringMap() {
 
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
+                  <p className="text-sm text-slate-700 leading-relaxed mb-4">
                   <p className="text-sm text-slate-700 leading-relaxed">
                     {selectedIndicator.description}
                   </p>
-                </div>
-              </div>
 
-              {/* All Scores for This Province */}
-              <div>
-                <h3 className="font-bold text-xl mb-4" style={{ color: '#333f50' }}>All Indicator Scores</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-1">
-                  {INDICATORS.map(indicator => {
-                    const score = getProvinceScore(selectedProvince, indicator.id);
-                    return (
-                      <button
-                        key={indicator.id}
-                        onClick={() => {
-                          setSelectedIndicator(indicator);
-                          setDialogOpen(false);
-                        }}
-                        className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#c4a006';
-                          e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="flex-1 min-w-0">
-                            <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
-                            <div className="text-xs text-slate-600 mt-1 line-clamp-1">{indicator.description}</div>
+                  {/* Scoring Scale with Rubric Criteria */}
+                  {(() => {
+                    const rubricCriteria = getRubricCriteria(selectedIndicator.id);
+                    const currentScore = getRegionScore(selectedProvince);
+                    if (rubricCriteria) {
+                      return (
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-slate-200">
+                          <div className="flex items-center justify-between mb-2.5">
+                            <div className="text-xs font-bold text-slate-600 uppercase tracking-wider">Scoring Scale (1-5)</div>
+                            <button
+                              onClick={() => setShowAllScoreLevels(!showAllScoreLevels)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 border-2"
+                              style={{
+                                backgroundColor: showAllScoreLevels ? '#c4a006' : 'rgba(196, 160, 6, 0.1)',
+                                borderColor: '#c4a006',
+                                color: showAllScoreLevels ? 'white' : '#333f50'
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!showAllScoreLevels) {
+                                  e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.2)';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!showAllScoreLevels) {
+                                  e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
+                                }
+                              }}
+                            >
+                              <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${showAllScoreLevels ? 'rotate-180' : ''}`} />
+                              {showAllScoreLevels ? 'Hide Levels' : 'View All Levels'}
+                            </button>
                           </div>
+                          <div className="space-y-2.5">
+                            {[5, 4, 3, 2, 1]
+                              .filter(score => showAllScoreLevels || score === currentScore)
+                              .map(score => {
+                                const criteria = rubricCriteria[score];
+                                const isCurrentScore = score === currentScore;
+                                return (
+                                  <div
+                                    key={score}
+                                    className={`p-2.5 rounded-lg ${isCurrentScore ? 'bg-yellow-50 border-2 border-yellow-400' : 'bg-slate-50 border border-slate-200'}`}
+                                  >
+                                    <div className="flex items-center gap-2.5 mb-1.5">
+                                      <div
+                                        className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                                        style={{ backgroundColor: getScoreColor(score) }}
+                                      >
+                                        {score}
+                                      </div>
+                                      {isCurrentScore && (
+                                        <span className="text-xs font-bold text-yellow-700 uppercase tracking-wider">Current Score</span>
+                                      )}
+                                    </div>
+                                    {criteria && (
+                                      <div className="space-y-1 ml-9">
+                                        {Object.entries(criteria).map(([key, value]) => (
+                                          <div key={key} className="flex gap-2 items-start">
+                                            <div className="flex-shrink-0 w-1 h-1 rounded-full mt-1.5" style={{ backgroundColor: '#c4a006' }}></div>
+                                            <div className="flex-1 text-xs leading-tight">
+                                              <span className="font-semibold text-slate-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}: </span>
+                                              <span className="text-slate-600">{value}</span>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
                           <div
                             className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
                             style={{ backgroundColor: getScoreColor(score) }}
@@ -570,10 +727,82 @@ export default function CanadaEvictionsScoringMap() {
                             {score} / 5
                           </div>
                         </div>
-                      </button>
-                    );
-                  })}
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
+              </div>
+
+              {/* All Scores for This Province */}
+              <div className="rounded-xl border-2 overflow-hidden transition-all duration-200 hover:shadow-md" style={{ borderColor: showAllIndicators ? '#c4a006' : 'rgba(51, 63, 80, 0.2)' }}>
+                <button
+                  onClick={() => setShowAllIndicators(!showAllIndicators)}
+                  className="w-full px-5 py-4 flex items-center justify-between transition-all duration-200 cursor-pointer"
+                  style={{
+                    backgroundColor: showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
+                    e.currentTarget.closest('div').style.borderColor = '#c4a006';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = showAllIndicators ? 'rgba(51, 63, 80, 0.06)' : 'rgba(51, 63, 80, 0.03)';
+                    e.currentTarget.closest('div').style.borderColor = showAllIndicators ? '#c4a006' : 'rgba(51, 63, 80, 0.2)';
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-xl" style={{ color: '#333f50' }}>All Indicator Scores</h3>
+                    {!showAllIndicators && (
+                      <span className="px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#c4a006' }}>
+                        10
+                      </span>
+                    )}
+                  </div>
+                  <ChevronDown
+                    className={`h-6 w-6 transition-transform duration-200 ${showAllIndicators ? 'rotate-180' : ''}`}
+                    style={{ color: '#c4a006' }}
+                  />
+                </button>
+                {showAllIndicators && (
+                  <div className="p-5 border-t-2" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {INDICATORS.map(indicator => {
+                        const score = getProvinceScore(selectedProvince, indicator.id);
+                        return (
+                          <button
+                            key={indicator.id}
+                            onClick={() => {
+                              setSelectedIndicator(indicator);
+                            }}
+                            className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = '#c4a006';
+                              e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.05)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = '#e2e8f0';
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                            }}
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
+                                <div className="text-xs text-slate-600 mt-1 line-clamp-2">{indicator.description}</div>
+                              </div>
+                              <div
+                                className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
+                                style={{ backgroundColor: getScoreColor(score) }}
+                              >
+                                {score}/5
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Resources */}
@@ -617,6 +846,7 @@ export default function CanadaEvictionsScoringMap() {
                     Full Analysis
                   </a>
                 </div>
+              </div>
               </div>
             </div>
           )}
