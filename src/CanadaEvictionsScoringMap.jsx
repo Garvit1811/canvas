@@ -610,7 +610,6 @@ export default function CanadaEvictionsScoringMap() {
                         key={indicator.id}
                         onClick={() => {
                           setSelectedIndicator(indicator);
-                          setDialogOpen(false);
                         }}
                         className="text-left p-4 rounded-xl border-2 border-slate-200 transition-all duration-200 hover:shadow-md group"
                         onMouseEnter={(e) => {
@@ -625,7 +624,7 @@ export default function CanadaEvictionsScoringMap() {
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex-1 min-w-0">
                             <div className="font-bold text-sm text-slate-900 transition-colors">{indicator.shortName}</div>
-                            <div className="text-xs text-slate-600 mt-1 line-clamp-1">{indicator.description}</div>
+                            <div className="text-xs text-slate-600 mt-1 line-clamp-2">{indicator.description}</div>
                           </div>
                           <div
                             className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
