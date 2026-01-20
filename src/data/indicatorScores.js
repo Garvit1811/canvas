@@ -26,6 +26,45 @@ export const INDICATORS = [
       3: "Moderate notice periods; standard protections",
       4: "Extended notice periods; strong tenant safeguards",
       5: "Comprehensive notice requirements; maximum tenant protections"
+    },
+    rubricCriteria: {
+      5: {
+        nonPayment: "More than 20 days",
+        landlordUse: "More than 3 months",
+        purchaserUse: "More than 3 months",
+        demolitionRenovation: "More than 4 months",
+        assaultDamage: "Termination or 'order to correct'",
+        goodFaith: "Good faith requirements",
+        protectedGroups: "Certain groups have additional rights (e.g., Quebec - seniors that have lived in the residence for >10 years cannot be evicted for LL use; Manitoba - tenants with school age children cannot be evicted during the school year if their residence is within reasonable distance to school)"
+      },
+      4: {
+        nonPayment: "15-20 days",
+        landlordUse: "2-3 months",
+        purchaserUse: "2-3 months",
+        demolitionRenovation: "3-4 months",
+        assaultDamage: "10-20 days"
+      },
+      3: {
+        nonPayment: "7-14 days",
+        landlordUse: "1-2 months",
+        purchaserUse: "1-2 months",
+        demolitionRenovation: "2-3 months",
+        assaultDamage: ">5 days - <10 days"
+      },
+      2: {
+        nonPayment: "1-7 days",
+        landlordUse: "Less than 1 month",
+        purchaserUse: "Less than 1 month",
+        demolitionRenovation: "1-2 months",
+        assaultDamage: ">24 - <5 days"
+      },
+      1: {
+        nonPayment: "Immediate",
+        landlordUse: "Immediate",
+        purchaserUse: "Immediate",
+        demolitionRenovation: "Less than 1 month",
+        assaultDamage: "<24 hours"
+      }
     }
   },
   {
