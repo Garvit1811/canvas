@@ -543,7 +543,7 @@ export default function CanadaEvictionsScoringMap() {
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
                   <p className="text-sm text-slate-700 leading-relaxed mb-4">
-                    {getScoreExplanation(selectedIndicator.id, getRegionScore(selectedProvince))}
+                    {selectedIndicator.description}
                   </p>
 
                   {/* Scoring Scale with Rubric Criteria */}
@@ -631,7 +631,7 @@ export default function CanadaEvictionsScoringMap() {
                             className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
                             style={{ backgroundColor: getScoreColor(score) }}
                           >
-                            {score}
+                            {score}/5
                           </div>
                         </div>
                       </button>
