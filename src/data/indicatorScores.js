@@ -216,6 +216,7 @@ export const INDICATORS = [
     name: "Eviction Types",
     shortName: "Eviction Types",
     description: "The grounds for which a landlord can legally evict a tenant, including both at-fault (e.g., non-payment, damage, illegal activity) and no-fault (e.g., landlord use, demolition/renovation).",
+    description: "The grounds on which a landlord can legally evict a tenant, including both at-fault (e.g., non-payment, damage, illegal activity) and no-fault (e.g., landlord use, demolition/renovation).",
     scoreDescriptions: {
       1: "Broad eviction grounds; minimal restrictions",
       2: "Wide eviction grounds; limited restrictions",
@@ -354,6 +355,7 @@ export const INDICATORS = [
     name: "Conditional Orders",
     shortName: "Conditional",
     description: "Orders that allow tenants facing eviction (particularly for non-payment or remediable breaches) to remain if they meet specific conditions, such as paying arrears by a set date or correcting lease violations/non-payments.",
+    description: "Orders that allow tenants facing eviction (particularly for non-payment or remediable breaches) to remain if specific conditions are met, such as paying arrears by a set date or correcting lease violations including payments.",
     scoreDescriptions: {
       1: "No conditional orders available",
       2: "Limited conditional orders; rarely granted",
