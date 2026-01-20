@@ -34,8 +34,7 @@ export const INDICATORS = [
         purchaserUse: "More than 3 months",
         demolitionRenovation: "More than 4 months",
         assaultDamage: "Termination or 'order to correct'",
-        goodFaith: "Good faith requirements",
-        protectedGroups: "Certain groups have additional rights (e.g., Quebec - seniors that have lived in the residence for >10 years cannot be evicted for LL use; Manitoba - tenants with school age children cannot be evicted during the school year if their residence is within reasonable distance to school)"
+        goodFaith: "Good faith requirements"
       },
       4: {
         nonPayment: "15-20 days",
