@@ -15,6 +15,8 @@ import {
   getRubricCriteria,
   getProvinceModifiers,
   getNoticeBreakdown,
+  getDisputeBreakdown,
+  getOrderBreakdown,
   NOTICE_BREAKDOWN
 } from "./data/indicatorScores";
 
@@ -733,7 +735,9 @@ export default function CanadaEvictionsScoringMap() {
               {selectedProvince && (() => {
                 const modifiers = getProvinceModifiers(selectedProvince, selectedIndicator.id);
                 const noticeBreakdown = selectedIndicator.id === 'notice_termination' ? getNoticeBreakdown(selectedProvince) : null;
-                const hasContent = modifiers.length > 0 || noticeBreakdown;
+                const disputeBreakdown = selectedIndicator.id === 'dispute_period' ? getDisputeBreakdown(selectedProvince) : null;
+                const orderBreakdown = selectedIndicator.id === 'order_possession' ? getOrderBreakdown(selectedProvince) : null;
+                const hasContent = modifiers.length > 0 || noticeBreakdown || disputeBreakdown || orderBreakdown;
 
                 if (!hasContent) return null;
 
@@ -755,6 +759,32 @@ export default function CanadaEvictionsScoringMap() {
                           <div className="bg-white rounded-lg px-3 py-2 border border-slate-200">
                             <span className="text-slate-500">Average:</span>
                             <span className="font-bold text-slate-800 ml-1">{noticeBreakdown.average}/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Dispute Period breakdown */}
+                    {disputeBreakdown && (
+                      <div className="mb-3">
+                        <div className="text-sm font-semibold text-slate-700 mb-2">Base Score</div>
+                        <div className="grid grid-cols-1 gap-2 text-xs">
+                          <div className="bg-white rounded-lg px-3 py-2 border border-slate-200">
+                            <span className="text-slate-500">Base score (before modifiers):</span>
+                            <span className="font-bold text-slate-800 ml-1">{disputeBreakdown.baseScore}/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Order of Possession breakdown */}
+                    {orderBreakdown && (
+                      <div className="mb-3">
+                        <div className="text-sm font-semibold text-slate-700 mb-2">Base Score</div>
+                        <div className="grid grid-cols-1 gap-2 text-xs">
+                          <div className="bg-white rounded-lg px-3 py-2 border border-slate-200">
+                            <span className="text-slate-500">Base score (before modifiers):</span>
+                            <span className="font-bold text-slate-800 ml-1">{orderBreakdown.baseScore}/5</span>
                           </div>
                         </div>
                       </div>
