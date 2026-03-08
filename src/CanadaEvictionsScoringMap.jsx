@@ -12,12 +12,15 @@ import {
   getScoreExplanation,
   getScoreColor,
   SCORE_DESCRIPTIONS,
-  getRubricCriteria
+  getRubricCriteria,
+  getProvinceModifiers,
+  getNoticeBreakdown,
+  NOTICE_BREAKDOWN
 } from "./data/indicatorScores";
 
 /**
  * Canada Eviction Scoring Map
- * Interactive map showing provincial scores across 10 key eviction indicators
+ * Interactive map showing provincial scores across 12 key eviction indicators
  */
 
 // Use external GeoJSON URL (same as standalone.html) - most reliable for production
@@ -425,11 +428,9 @@ export default function CanadaEvictionsScoringMap() {
                                   const name = String(rawName);
                                   const id = NAME_TO_ID[name];
 
-                                  // Grey out territories without data (NT, NU)
-                                  const isGreyedOut = id && ['NT', 'NU'].includes(id);
-                                  const score = id && !isGreyedOut ? getRegionScore(id) : null;
-                                  const fill = isGreyedOut ? "#d1d5db" : (score ? getScoreColor(score) : "#e5e7eb");
-                                  const isClickable = id && !isGreyedOut;
+                                  const score = id ? getRegionScore(id) : null;
+                                  const fill = score ? getScoreColor(score) : "#e5e7eb";
+                                  const isClickable = !!id;
 
                                   return (
                                     <Geography
@@ -465,12 +466,12 @@ export default function CanadaEvictionsScoringMap() {
                                           cursor: isClickable ? "pointer" : "default",
                                         },
                                         hover: {
-                                          fill: isGreyedOut ? fill : fill,
-                                          stroke: isGreyedOut ? "#ffffff" : "#111111",
-                                          strokeWidth: isGreyedOut ? 1.5 : 2,
+                                          fill,
+                                          stroke: isClickable ? "#111111" : "#ffffff",
+                                          strokeWidth: isClickable ? 2 : 1.5,
                                           outline: "none",
                                           cursor: isClickable ? "pointer" : "default",
-                                          filter: isGreyedOut ? "none" : "brightness(1.1)",
+                                          filter: isClickable ? "brightness(1.1)" : "none",
                                         },
                                         pressed: { fill, outline: "none" },
                                       }}
@@ -503,7 +504,7 @@ export default function CanadaEvictionsScoringMap() {
 
                     <div className={`${showLegend ? 'block' : 'hidden'} lg:block`}>
                       <p className="text-base text-slate-600 mb-5 leading-relaxed">
-                        Each province is evaluated across 10 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
+                        Each province is evaluated across 12 key indicators using a 5-point scale. Higher scores indicate stronger tenant protections.
                       </p>
 
                       {/* Table Format */}
@@ -645,7 +646,6 @@ export default function CanadaEvictionsScoringMap() {
 
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(196, 160, 6, 0.3)' }}>
                   <div className="text-sm font-bold text-slate-700 mb-2">Explanation:</div>
-                  <p className="text-sm text-slate-700 leading-relaxed mb-4">
                   <p className="text-sm text-slate-700 leading-relaxed">
                     {selectedIndicator.description}
                   </p>
@@ -720,11 +720,6 @@ export default function CanadaEvictionsScoringMap() {
                                   </div>
                                 );
                               })}
-                          <div
-                            className="flex-shrink-0 px-3 py-1.5 rounded-lg font-bold text-white text-lg shadow-sm"
-                            style={{ backgroundColor: getScoreColor(score) }}
-                          >
-                            {score} / 5
                           </div>
                         </div>
                       );
@@ -733,6 +728,82 @@ export default function CanadaEvictionsScoringMap() {
                   })()}
                 </div>
               </div>
+
+              {/* Binary Bonus/Penalty Modifiers */}
+              {selectedProvince && (() => {
+                const modifiers = getProvinceModifiers(selectedProvince, selectedIndicator.id);
+                const noticeBreakdown = selectedIndicator.id === 'notice_termination' ? getNoticeBreakdown(selectedProvince) : null;
+                const hasContent = modifiers.length > 0 || noticeBreakdown;
+
+                if (!hasContent) return null;
+
+                return (
+                  <div className="rounded-xl p-5 border-2 shadow-sm" style={{ backgroundColor: 'rgba(196, 160, 6, 0.04)', borderColor: 'rgba(196, 160, 6, 0.3)' }}>
+                    <div className="text-xs uppercase tracking-wider font-bold mb-3" style={{ color: '#c4a006' }}>
+                      Score Modifiers & Breakdown
+                    </div>
+
+                    {/* Notice of Termination breakdown */}
+                    {noticeBreakdown && (
+                      <div className="mb-3">
+                        <div className="text-sm font-semibold text-slate-700 mb-2">Sub-Category Breakdown</div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="bg-white rounded-lg px-3 py-2 border border-slate-200">
+                            <span className="text-slate-500">Sub-scores total:</span>
+                            <span className="font-bold text-slate-800 ml-1">{noticeBreakdown.total}/25</span>
+                          </div>
+                          <div className="bg-white rounded-lg px-3 py-2 border border-slate-200">
+                            <span className="text-slate-500">Average:</span>
+                            <span className="font-bold text-slate-800 ml-1">{noticeBreakdown.average}/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Bonus modifiers */}
+                    {modifiers.length > 0 && (
+                      <div className="space-y-2">
+                        {modifiers.map((mod) => (
+                          <div key={mod.key} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2.5 border border-slate-200">
+                            <div className="flex-shrink-0 mt-0.5">
+                              <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold text-white ${mod.type === 'bonus' ? 'bg-green-500' : 'bg-red-500'}`}>
+                                {mod.type === 'bonus' ? '+' : '−'}
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="text-sm font-semibold text-slate-800">{mod.label}</div>
+                              <div className="text-xs text-slate-600 mt-0.5">{mod.description}</div>
+                              {mod.detail && (
+                                <div className="text-xs mt-1 px-2 py-1 rounded bg-slate-50 border border-slate-100 text-slate-700 italic">
+                                  {mod.detail}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Show which bonuses the province does NOT have */}
+                    {noticeBreakdown && (
+                      <div className="mt-2 space-y-1.5">
+                        {!noticeBreakdown.goodFaith && (
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-300 text-white text-[10px] font-bold">✕</span>
+                            No good faith requirement legislation
+                          </div>
+                        )}
+                        {!noticeBreakdown.protectedGroup && (
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-300 text-white text-[10px] font-bold">✕</span>
+                            No additional protected group provisions
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* All Scores for This Province */}
               <div className="rounded-xl border-2 overflow-hidden transition-all duration-200 hover:shadow-md" style={{ borderColor: showAllIndicators ? '#c4a006' : 'rgba(51, 63, 80, 0.2)' }}>
@@ -755,7 +826,7 @@ export default function CanadaEvictionsScoringMap() {
                     <h3 className="font-bold text-xl" style={{ color: '#333f50' }}>All Indicator Scores</h3>
                     {!showAllIndicators && (
                       <span className="px-2 py-1 rounded-full text-xs font-bold text-white" style={{ backgroundColor: '#c4a006' }}>
-                        10
+                        12
                       </span>
                     )}
                   </div>
