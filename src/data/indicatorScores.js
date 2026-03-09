@@ -703,7 +703,7 @@ export const BINARY_MODIFIERS = {
 };
 
 // Dispute Period sub-component data
-// Void Option: boolean indicator shown in modal (all provinces have this)
+// Void Option: +1 indicator included in the score for all provinces
 export const DISPUTE_BREAKDOWN = {
   BC:  { voidOption: true },
   AB:  { voidOption: true },
@@ -721,7 +721,7 @@ export const DISPUTE_BREAKDOWN = {
 };
 
 // Order of Possession sub-component data
-// Grace Period and Proportionality: boolean indicators shown in modal (all provinces have both)
+// Grace Period (+1) and Proportionality (+1) indicators included in the score for all provinces
 export const ORDER_BREAKDOWN = {
   BC:  { gracePeriod: true, proportionality: true },
   AB:  { gracePeriod: true, proportionality: true },
