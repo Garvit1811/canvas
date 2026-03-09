@@ -4,6 +4,7 @@ import { Button } from "./components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
 import { Search, FileText, Download, ChevronDown } from "lucide-react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   INDICATORS,
   PROVINCIAL_SCORES,
@@ -41,6 +42,7 @@ const NAME_TO_ID = {
   "Prince Edward Island": "PE",
   "Newfoundland and Labrador": "NL",
   "Yukon": "YT",
+  "Yukon Territory": "YT",
   "Northwest Territories": "NT",
   "Nunavut": "NU",
 };
@@ -73,7 +75,7 @@ export default function CanadaEvictionsScoringMap() {
   const [provinceDropdownOpen, setProvinceDropdownOpen] = useState(false);
   const [indicatorDropdownOpen, setIndicatorDropdownOpen] = useState(false);
   const [showAllScoreLevels, setShowAllScoreLevels] = useState(false);
-  const [showAllIndicators, setShowAllIndicators] = useState(true);
+  const [showAllIndicators, setShowAllIndicators] = useState(false);
   const [mapLoading, setMapLoading] = useState(true);
   const [hoveredProvince, setHoveredProvince] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -83,7 +85,7 @@ export default function CanadaEvictionsScoringMap() {
     }
     return false;
   });
-  const [showLegend, setShowLegend] = useState(true);
+  const [showLegend, setShowLegend] = useState(false);
 
   // Auto-dismiss hint after 3 seconds
   useEffect(() => {
@@ -115,7 +117,6 @@ export default function CanadaEvictionsScoringMap() {
   const resetView = () => { setCenter([-96, 61]); setZoom(1); };
 
   const provinceList = Object.entries(PROVINCE_NAMES)
-    .filter(([id]) => !['YT', 'NT', 'NU'].includes(id)) // Exclude territories
     .map(([id, name]) => ({
       id,
       name,
@@ -127,80 +128,60 @@ export default function CanadaEvictionsScoringMap() {
     <div className="w-full min-h-screen" style={{ background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #b0c4de 100%)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
-        <header className="mb-10">
-          <div className="rounded-2xl shadow-xl mb-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-            <div className="text-center px-8 py-10">
-              <h1 className="text-5xl font-extrabold mb-4 tracking-tight text-white">
+        <header className="mb-8">
+          <div className="rounded-xl shadow-md overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
+            <div className="text-center px-6 py-7">
+              <h1 className="text-4xl font-bold mb-3 tracking-tight text-white">
                 Canadian Provincial Eviction Process Comparison
               </h1>
-              <p className="text-xl mb-4 max-w-4xl mx-auto leading-relaxed" style={{ color: '#c4a006' }}>
+              <p className="text-lg mb-3 max-w-4xl mx-auto leading-relaxed text-gold">
                 An interactive tool to understand and compare tenant protections across Canadian provinces
               </p>
-              <p className="text-base text-slate-200 max-w-4xl mx-auto leading-relaxed">
-                Eviction laws determine how and when landlords can remove tenants from rental housing. These laws vary significantly across Canada, affecting millions of renters. This tool evaluates each province across 10 key indicators—including notice periods, hearing processes, rent control, and appeal rights—using a 5-point scale. Higher scores indicate stronger tenant protections. Use the map and indicators below to explore how your province compares and understand what protections exist for renters in different regions.
+              <p className="text-sm text-slate-300 max-w-4xl mx-auto leading-relaxed mb-4">
+                Eviction laws determine how and when landlords can remove tenants from rental housing. These laws vary significantly across Canada, affecting millions of renters. This tool evaluates each province across 12 key indicators—including notice periods, hearing processes, rent control, and appeal rights—using a 5-point scale. Higher scores indicate stronger tenant protections.
               </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {Object.entries(PDF_DOCUMENTS).map(([key, doc]) => (
+                  <a
+                    key={key}
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-gold inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs shadow-sm"
+                    title={doc.description}
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    {doc.title}
+                    <Download className="h-3 w-3" />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
-
-          {/* PDF Resources */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {Object.entries(PDF_DOCUMENTS).map(([key, doc]) => (
-              <a
-                key={key}
-                href={doc.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-6 py-3 bg-white border-2 rounded-xl hover:shadow-lg transition-all duration-200 text-sm font-semibold shadow-md"
-                style={{
-                  borderColor: '#c4a006',
-                  color: '#333f50',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#c4a006';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'white';
-                  e.currentTarget.style.color = '#333f50';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-                title={doc.description}
-              >
-                <FileText className="h-4 w-4" />
-                {doc.title}
-                <Download className="h-3.5 w-3.5" />
-              </a>
-            ))}
           </div>
         </header>
 
         {/* Top Section - Dropdowns and Current Indicator */}
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr_280px] gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr_240px] gap-4 mb-6">
           {/* Left - Select Indicator Dropdown */}
-          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
-              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
-              Select Indicator
-            </h2>
-            <div className="relative">
-              <button
-                onClick={() => setIndicatorDropdownOpen(!indicatorDropdownOpen)}
-                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
-                style={{ borderColor: '#333f50' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#c4a006';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#333f50';
-                }}
-              >
-                <span className="text-sm font-semibold">{selectedIndicator.shortName}</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${indicatorDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
-              </button>
+          <div className="relative">
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5 block">Select Indicator</label>
+            <button
+              onClick={() => setIndicatorDropdownOpen(!indicatorDropdownOpen)}
+              className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-left flex items-center justify-between hover:border-gold transition-all duration-200 shadow-sm"
+            >
+              <span className="text-sm font-semibold text-dark">{selectedIndicator.shortName}</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${indicatorDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
 
+            <AnimatePresence>
               {indicatorDropdownOpen && (
-                <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute z-20 w-full mt-1.5 bg-white border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden"
+                >
                   <div className="max-h-80 overflow-y-auto">
                     {INDICATORS.map((indicator) => (
                       <button
@@ -209,96 +190,71 @@ export default function CanadaEvictionsScoringMap() {
                           setSelectedIndicator(indicator);
                           setIndicatorDropdownOpen(false);
                         }}
-                        className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
-                        style={
+                        className={`w-full px-4 py-2.5 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium ${
                           selectedIndicator.id === indicator.id
-                            ? { backgroundColor: 'rgba(51, 63, 80, 0.08)', fontWeight: '700' }
-                            : {}
-                        }
-                        onMouseEnter={(e) => {
-                          if (selectedIndicator.id !== indicator.id) {
-                            e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (selectedIndicator.id !== indicator.id) {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                          } else {
-                            e.currentTarget.style.backgroundColor = 'rgba(51, 63, 80, 0.08)';
-                          }
-                        }}
+                            ? 'bg-dark/[0.06] font-bold text-dark'
+                            : 'text-slate-600 hover:bg-gold/10'
+                        }`}
                       >
                         <span>{indicator.shortName}</span>
                         {selectedIndicator.id === indicator.id && (
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#c4a006' }}></div>
+                          <div className="w-2 h-2 rounded-full bg-gold"></div>
                         )}
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </div>
 
           {/* Center - Current Indicator Info */}
-          <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-            <div className="p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: '#c4a006' }}>
-                    Current Indicator
-                  </div>
-                  <h2 className="text-2xl font-bold text-white mb-2">{selectedIndicator.name}</h2>
-                  <p className="text-sm text-slate-200 leading-relaxed">{selectedIndicator.description}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <div className="text-xs uppercase tracking-wider font-semibold mb-1.5 text-gold">
+                  Current Indicator
                 </div>
-                <div className="flex-shrink-0 rounded-xl px-4 py-3 border-2" style={{ backgroundColor: 'rgba(196, 160, 6, 0.15)', borderColor: '#c4a006' }}>
-                  <div className="text-xs font-medium mb-1 text-center" style={{ color: '#c4a006' }}>Score Scale</div>
-                  <div className="text-3xl font-bold text-white text-center">1-5</div>
-                </div>
+                <h2 className="text-xl font-bold text-dark mb-1.5">{selectedIndicator.name}</h2>
+                <p className="text-sm text-slate-600 leading-relaxed">{selectedIndicator.description}</p>
+              </div>
+              <div className="flex-shrink-0 rounded-lg px-3 py-2 bg-dark/5 border border-dark/10">
+                <div className="text-[10px] font-medium mb-0.5 text-center text-slate-500">Scale</div>
+                <div className="text-2xl font-bold text-dark text-center">1-5</div>
               </div>
             </div>
           </div>
 
-          {/* Right - Jump to Province Dropdown */}
-          <div className="bg-white rounded-2xl shadow-xl border-2 p-6" style={{ borderColor: 'rgba(196, 160, 6, 0.2)' }}>
-            <h2 className="font-bold mb-4 text-lg flex items-center gap-2.5" style={{ color: '#333f50' }}>
-              <div className="w-1.5 h-6 rounded-full shadow-sm" style={{ backgroundColor: '#c4a006' }}></div>
-              Jump to Province
-            </h2>
-            <div className="relative">
-              <button
-                onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
-                className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-left flex items-center justify-between hover:bg-white hover:shadow-sm transition-all duration-200 font-medium text-slate-700"
-                style={{ borderColor: '#333f50' }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#c4a006';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#333f50';
-                }}
-              >
-                <span className="text-sm">Select province...</span>
-                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} style={{ color: '#333f50' }} />
-              </button>
+          {/* Right - Jump to Province/Territory */}
+          <div className="relative">
+            <label className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5 block">Jump to Province/Territory</label>
+            <button
+              onClick={() => setProvinceDropdownOpen(!provinceDropdownOpen)}
+              className="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-lg text-left flex items-center justify-between hover:border-gold transition-all duration-200 shadow-sm"
+            >
+              <span className="text-sm text-slate-500">Select province...</span>
+              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-200 ${provinceDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
 
+            <AnimatePresence>
               {provinceDropdownOpen && (
-                <div className="absolute z-20 w-full mt-2 bg-white border-2 rounded-xl shadow-xl max-h-80 overflow-hidden" style={{ borderColor: '#333f50' }}>
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute z-20 w-full mt-1.5 bg-white border border-slate-200 rounded-lg shadow-lg max-h-80 overflow-hidden"
+                >
                   <div className="max-h-80 overflow-y-auto">
                     {provinceList.map((prov) => (
                       <button
                         key={prov.id}
                         onClick={() => onSelectProvince(prov.id)}
-                        className="w-full px-4 py-3 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-700"
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(196, 160, 6, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm flex items-center justify-between border-b border-slate-100 last:border-b-0 transition-colors duration-150 font-medium text-slate-600 hover:bg-gold/10"
                       >
                         <span>{prov.name}</span>
                         <span
-                          className="px-2.5 py-1 rounded-lg text-xs font-bold text-white shadow-sm"
+                          className="px-2 py-0.5 rounded text-xs font-bold text-white"
                           style={{ backgroundColor: getScoreColor(prov.score) }}
                         >
                           {prov.score}
@@ -306,65 +262,39 @@ export default function CanadaEvictionsScoringMap() {
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
           </div>
         </div>
 
         {/* Map Section - Full Width */}
         <div className="w-full">
           {/* Map */}
-          <div className="bg-white rounded-2xl shadow-xl border-2 overflow-hidden" style={{ borderColor: 'rgba(51, 63, 80, 0.15)' }}>
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
               <div className="p-6">
-                <div className="w-full h-[560px] relative rounded-xl overflow-hidden border-2" style={{ backgroundColor: '#f8fafc', borderColor: 'rgba(196, 160, 6, 0.15)' }}>
+                <div className="w-full h-[560px] relative rounded-lg overflow-hidden border border-slate-200" style={{ backgroundColor: '#f8fafc' }}>
                   {/* Zoom Controls */}
-                  <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
-                    <button
-                      onClick={zoomIn}
-                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border-2 flex items-center justify-center text-slate-700 transition-all duration-200 font-bold text-xl"
-                      style={{ borderColor: '#333f50' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#333f50';
-                        e.currentTarget.style.color = 'white';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'white';
-                        e.currentTarget.style.color = '#334155';
-                      }}
-                    >
-                      +
-                    </button>
-                    <button
-                      onClick={zoomOut}
-                      className="w-10 h-10 rounded-full bg-white shadow-lg hover:shadow-xl border-2 flex items-center justify-center text-slate-700 transition-all duration-200 font-bold text-xl"
-                      style={{ borderColor: '#333f50' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#333f50';
-                        e.currentTarget.style.color = 'white';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'white';
-                        e.currentTarget.style.color = '#334155';
-                      }}
-                    >
-                      −
-                    </button>
-                    <button
-                      onClick={resetView}
-                      className="px-3 py-2 rounded-full bg-white shadow-lg hover:shadow-xl border-2 text-xs font-semibold text-slate-700 transition-all duration-200"
-                      style={{ borderColor: '#333f50' }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#333f50';
-                        e.currentTarget.style.color = 'white';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'white';
-                        e.currentTarget.style.color = '#334155';
-                      }}
-                    >
-                      Reset
-                    </button>
+                  <div className="absolute right-4 top-4 z-10 flex flex-col gap-1.5">
+                    <button onClick={zoomIn} className="zoom-btn w-9 h-9 rounded-full shadow-md flex items-center justify-center font-bold text-lg">+</button>
+                    <button onClick={zoomOut} className="zoom-btn w-9 h-9 rounded-full shadow-md flex items-center justify-center font-bold text-lg">−</button>
+                    <button onClick={resetView} className="zoom-btn px-2.5 py-1.5 rounded-full shadow-md text-xs font-semibold">Reset</button>
+                  </div>
+
+                  {/* Inline Color Legend */}
+                  <div className="absolute bottom-3 left-3 z-10 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm border border-slate-200">
+                    {[
+                      { score: 1, label: 'Minimal' },
+                      { score: 2, label: 'Weak' },
+                      { score: 3, label: 'Adequate' },
+                      { score: 4, label: 'Strong' },
+                      { score: 5, label: 'Best' },
+                    ].map(({ score, label }) => (
+                      <div key={score} className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: getScoreColor(score) }}></div>
+                        <span className="text-[10px] font-medium text-slate-600">{score} {label}</span>
+                      </div>
+                    ))}
                   </div>
 
                   {/* Loading State */}
