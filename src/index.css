@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn-gold {
+    @apply bg-white border-2 border-gold text-dark font-semibold
+      hover:bg-gold hover:text-white hover:-translate-y-0.5
+      transition-all duration-200;
+  }
+  .zoom-btn {
+    @apply bg-white border-2 border-dark text-slate-700
+      hover:bg-dark hover:text-white
+      transition-all duration-200;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
