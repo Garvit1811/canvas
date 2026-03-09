@@ -449,7 +449,7 @@ export const INDICATORS = [
 export const PROVINCIAL_SCORES = {
   BC: {
     notice_termination: 4,
-    dispute_period: 4,
+    dispute_period: 3,
     hearing_decision: 4,
     order_possession: 5,
     rent_control: 4,
@@ -463,9 +463,9 @@ export const PROVINCIAL_SCORES = {
   },
   AB: {
     notice_termination: 3,
-    dispute_period: 4,
+    dispute_period: 3,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 3,
@@ -477,9 +477,9 @@ export const PROVINCIAL_SCORES = {
   },
   SK: {
     notice_termination: 4,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 3,
@@ -491,9 +491,9 @@ export const PROVINCIAL_SCORES = {
   },
   MB: {
     notice_termination: 5,
-    dispute_period: 3,
+    dispute_period: 2,
     hearing_decision: 3,
-    order_possession: 5,
+    order_possession: 4,
     rent_control: 3,
     above_guideline: 5,
     eviction_types: 4,
@@ -505,9 +505,9 @@ export const PROVINCIAL_SCORES = {
   },
   ON: {
     notice_termination: 4,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 3,
     above_guideline: 3,
     eviction_types: 3,
@@ -519,9 +519,9 @@ export const PROVINCIAL_SCORES = {
   },
   QC: {
     notice_termination: 5,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 3,
-    order_possession: 5,
+    order_possession: 4,
     rent_control: 3,
     above_guideline: 2,
     eviction_types: 4,
@@ -533,9 +533,9 @@ export const PROVINCIAL_SCORES = {
   },
   NB: {
     notice_termination: 4,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 1,
-    order_possession: 4,
+    order_possession: 2,
     rent_control: 3,
     above_guideline: 3,
     eviction_types: 3,
@@ -547,9 +547,9 @@ export const PROVINCIAL_SCORES = {
   },
   NS: {
     notice_termination: 4,
-    dispute_period: 4,
+    dispute_period: 3,
     hearing_decision: 5,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 3,
@@ -561,9 +561,9 @@ export const PROVINCIAL_SCORES = {
   },
   PE: {
     notice_termination: 5,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 5,
     above_guideline: 4,
     eviction_types: 3,
@@ -575,9 +575,9 @@ export const PROVINCIAL_SCORES = {
   },
   NL: {
     notice_termination: 3,
-    dispute_period: 5,
+    dispute_period: 4,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 1,
@@ -589,9 +589,9 @@ export const PROVINCIAL_SCORES = {
   },
   YT: {
     notice_termination: 5,
-    dispute_period: 4,
+    dispute_period: 3,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 4,
     above_guideline: 4,
     eviction_types: 3,
@@ -605,7 +605,7 @@ export const PROVINCIAL_SCORES = {
     notice_termination: 4,
     dispute_period: 5,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 3,
@@ -619,7 +619,7 @@ export const PROVINCIAL_SCORES = {
     notice_termination: 4,
     dispute_period: 5,
     hearing_decision: 4,
-    order_possession: 5,
+    order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
     eviction_types: 3,
@@ -703,42 +703,39 @@ export const BINARY_MODIFIERS = {
 };
 
 // Dispute Period sub-component data
-// Base score is the score before binary bonuses
-// Void Option: 1 = tenant can void notice of termination, applies to all provinces
+// Void Option: boolean indicator shown in modal (all provinces have this)
 export const DISPUTE_BREAKDOWN = {
-  BC:  { baseScore: 3, voidOption: true },
-  AB:  { baseScore: 3, voidOption: true },
-  SK:  { baseScore: 4, voidOption: true },
-  MB:  { baseScore: 2, voidOption: true },
-  ON:  { baseScore: 4, voidOption: true },
-  QC:  { baseScore: 4, voidOption: true },
-  NB:  { baseScore: 4, voidOption: true },
-  NS:  { baseScore: 3, voidOption: true },
-  PE:  { baseScore: 4, voidOption: true },
-  NL:  { baseScore: 4, voidOption: true },
-  YT:  { baseScore: 3, voidOption: true },
-  NT:  { baseScore: 5, voidOption: true },
-  NU:  { baseScore: 5, voidOption: true }
+  BC:  { voidOption: true },
+  AB:  { voidOption: true },
+  SK:  { voidOption: true },
+  MB:  { voidOption: true },
+  ON:  { voidOption: true },
+  QC:  { voidOption: true },
+  NB:  { voidOption: true },
+  NS:  { voidOption: true },
+  PE:  { voidOption: true },
+  NL:  { voidOption: true },
+  YT:  { voidOption: true },
+  NT:  { voidOption: true },
+  NU:  { voidOption: true }
 };
 
 // Order of Possession sub-component data
-// Base score is the score before binary bonuses
-// Grace Period: 1 = grace period before enforcement, applies to all provinces
-// Proportionality: 1 = proportionality considerations included, applies to all provinces
+// Grace Period and Proportionality: boolean indicators shown in modal (all provinces have both)
 export const ORDER_BREAKDOWN = {
-  BC:  { baseScore: 5, gracePeriod: true, proportionality: true },
-  AB:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  SK:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  MB:  { baseScore: 4, gracePeriod: true, proportionality: true },
-  ON:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  QC:  { baseScore: 4, gracePeriod: true, proportionality: true },
-  NB:  { baseScore: 2, gracePeriod: true, proportionality: true },
-  NS:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  PE:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  NL:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  YT:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  NT:  { baseScore: 3, gracePeriod: true, proportionality: true },
-  NU:  { baseScore: 3, gracePeriod: true, proportionality: true }
+  BC:  { gracePeriod: true, proportionality: true },
+  AB:  { gracePeriod: true, proportionality: true },
+  SK:  { gracePeriod: true, proportionality: true },
+  MB:  { gracePeriod: true, proportionality: true },
+  ON:  { gracePeriod: true, proportionality: true },
+  QC:  { gracePeriod: true, proportionality: true },
+  NB:  { gracePeriod: true, proportionality: true },
+  NS:  { gracePeriod: true, proportionality: true },
+  PE:  { gracePeriod: true, proportionality: true },
+  NL:  { gracePeriod: true, proportionality: true },
+  YT:  { gracePeriod: true, proportionality: true },
+  NT:  { gracePeriod: true, proportionality: true },
+  NU:  { gracePeriod: true, proportionality: true }
 };
 
 // Province names mapping
