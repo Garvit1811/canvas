@@ -129,8 +129,15 @@ export default function CanadaEvictionsScoringMap() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-8">
-          <div className="rounded-xl shadow-md overflow-hidden" style={{ background: 'linear-gradient(135deg, #333f50 0%, #2a3340 100%)' }}>
-            <div className="text-center px-6 py-7">
+          <div
+            className="rounded-xl shadow-md overflow-hidden bg-slate-900"
+            style={{
+              backgroundImage: "linear-gradient(135deg, rgba(31, 41, 55, 0.68) 0%, rgba(15, 23, 42, 0.84) 100%), url('/hero-photo.jpeg')",
+              backgroundPosition: 'center 38%',
+              backgroundSize: 'cover',
+            }}
+          >
+            <div className="text-center px-6 py-10 sm:py-12">
               <h1 className="text-4xl font-bold mb-3 tracking-tight text-white">
                 Canadian Provincial Eviction Process Comparison
               </h1>
