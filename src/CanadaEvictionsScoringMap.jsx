@@ -49,20 +49,20 @@ const NAME_TO_ID = {
 
 // PDF Documents
 const PDF_DOCUMENTS = {
-  processMap: {
-    title: "Provincial Eviction Process Maps",
-    description: "Detailed flowcharts of eviction processes for each province",
-    url: "/pdfs/EvictionMaps_2025.pdf" // Update with actual path
-  },
   methodology: {
     title: "Analysis & Methodology Report",
     description: "Complete methodology and analysis of provincial eviction laws",
-    url: "/pdfs/Eviction_Report.pdf" // Update with actual path
+    url: "/pdfs/RenterRights_2026_Final.pdf"
   },
   rubric: {
     title: "Canadian Eviction Processes",
     description: "Scoring criteria for each indicator",
-    url: "/pdfs/Technical_Rubric.pdf" // Update with actual path
+    url: "/pdfs/Evictions%20Process%20Report_Final.pdf"
+  },
+  processMap: {
+    title: "Provincial Eviction Process Maps",
+    description: "Detailed flowcharts of eviction processes for each province",
+    url: "/pdfs/EvictionMaps_2025.pdf"
   }
 };
 
