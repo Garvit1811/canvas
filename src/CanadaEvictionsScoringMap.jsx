@@ -60,7 +60,7 @@ const PDF_DOCUMENTS = {
     url: "/pdfs/Eviction_Report.pdf" // Update with actual path
   },
   rubric: {
-    title: "Technical Rubric",
+    title: "Canadian Eviction Processes",
     description: "Scoring criteria for each indicator",
     url: "/pdfs/Technical_Rubric.pdf" // Update with actual path
   }
