@@ -139,10 +139,10 @@ export default function CanadaEvictionsScoringMap() {
           >
             <div className="text-center px-6 py-10 sm:py-12">
               <h1 className="text-4xl font-bold mb-3 tracking-tight text-white">
-                Canadian Provincial Eviction Process Comparison
+                Canadian Eviction Process Comparison
               </h1>
               <p className="text-lg mb-3 max-w-4xl mx-auto leading-relaxed text-gold">
-                An interactive tool to understand and compare tenant protections across Canadian provinces
+                An interactive tool to understand and compare tenant protections across Canada.
               </p>
               <p className="text-sm text-slate-300 max-w-4xl mx-auto leading-relaxed mb-4">
                 Eviction laws determine how and when landlords can remove tenants from rental housing. These laws vary significantly across Canada, affecting millions of renters. This tool evaluates each province across 12 key indicators—including notice periods, hearing processes, rent control, and appeal rights—using a 5-point scale. Higher scores indicate stronger tenant protections.
