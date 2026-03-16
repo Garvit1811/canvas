@@ -55,9 +55,9 @@ const PDF_DOCUMENTS = {
     url: "/pdfs/RenterRights_2026_Final.pdf"
   },
   rubric: {
-    title: "Canadian Eviction Processes",
-    description: "Scoring criteria for each indicator",
-    url: "/pdfs/Evictions%20Process%20Report_Final.pdf"
+    title: "Review of Canadian Eviction Filing Processes",
+    description: "Latest review of eviction filing processes across Canada",
+    url: "https://bsh.ubc.ca/evictions-process-report-2026/"
   },
   processMap: {
     title: "Provincial Eviction Process Maps",
