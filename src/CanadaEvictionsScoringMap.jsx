@@ -67,7 +67,7 @@ const PDF_DOCUMENTS = {
 };
 
 export default function CanadaEvictionsScoringMap() {
-  const [selectedIndicator, setSelectedIndicator] = useState(INDICATORS.find(i => i.id === "order_possession") || INDICATORS[0]);
+  const [selectedIndicator, setSelectedIndicator] = useState(INDICATORS.find(i => i.id === "rent_control") || INDICATORS[0]);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [center, setCenter] = useState([-96, 61]);
