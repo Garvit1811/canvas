@@ -52,12 +52,12 @@ const PDF_DOCUMENTS = {
   methodology: {
     title: "Analysis & Methodology Report",
     description: "Complete methodology and analysis of provincial eviction laws",
-    url: "/pdfs/RenterRights_2026_Final.pdf"
+    url: "https://bsh.ubc.ca/wp-content/uploads/2026/03/RenterRights_2026_Final.pdf"
   },
   rubric: {
     title: "Review of Canadian Eviction Filing Processes",
     description: "Latest review of eviction filing processes across Canada",
-    url: "https://bsh.ubc.ca/evictions-process-report-2026/"
+    url: "https://bsh.ubc.ca/wp-content/uploads/2026/03/Evictions-Process-Report-2026.pdf"
   },
   processMap: {
     title: "Provincial Eviction Process Maps",
@@ -67,7 +67,7 @@ const PDF_DOCUMENTS = {
 };
 
 export default function CanadaEvictionsScoringMap() {
-  const [selectedIndicator, setSelectedIndicator] = useState(INDICATORS.find(i => i.id === "order_possession") || INDICATORS[0]);
+  const [selectedIndicator, setSelectedIndicator] = useState(INDICATORS.find(i => i.id === "rent_control") || INDICATORS[0]);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [center, setCenter] = useState([-96, 61]);
