@@ -450,7 +450,7 @@ export const PROVINCIAL_SCORES = {
   BC: {
     notice_termination: 4,
     dispute_period: 3,
-    hearing_decision: 4,
+    hearing_decision: 3,
     order_possession: 5,
     rent_control: 4,
     above_guideline: 4,
@@ -464,7 +464,7 @@ export const PROVINCIAL_SCORES = {
   AB: {
     notice_termination: 3,
     dispute_period: 3,
-    hearing_decision: 4,
+    hearing_decision: 3,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
@@ -478,7 +478,7 @@ export const PROVINCIAL_SCORES = {
   SK: {
     notice_termination: 4,
     dispute_period: 4,
-    hearing_decision: 4,
+    hearing_decision: 3,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
@@ -520,7 +520,7 @@ export const PROVINCIAL_SCORES = {
   QC: {
     notice_termination: 5,
     dispute_period: 4,
-    hearing_decision: 3,
+    hearing_decision: 5,
     order_possession: 4,
     rent_control: 3,
     above_guideline: 2,
@@ -548,7 +548,7 @@ export const PROVINCIAL_SCORES = {
   NS: {
     notice_termination: 4,
     dispute_period: 3,
-    hearing_decision: 5,
+    hearing_decision: 2,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
@@ -562,7 +562,7 @@ export const PROVINCIAL_SCORES = {
   PE: {
     notice_termination: 5,
     dispute_period: 4,
-    hearing_decision: 4,
+    hearing_decision: 3,
     order_possession: 3,
     rent_control: 5,
     above_guideline: 4,
@@ -576,7 +576,7 @@ export const PROVINCIAL_SCORES = {
   NL: {
     notice_termination: 3,
     dispute_period: 4,
-    hearing_decision: 4,
+    hearing_decision: 1,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
@@ -590,7 +590,7 @@ export const PROVINCIAL_SCORES = {
   YT: {
     notice_termination: 5,
     dispute_period: 3,
-    hearing_decision: 4,
+    hearing_decision: 2,
     order_possession: 3,
     rent_control: 4,
     above_guideline: 4,
@@ -604,7 +604,7 @@ export const PROVINCIAL_SCORES = {
   NT: {
     notice_termination: 4,
     dispute_period: 5,
-    hearing_decision: 4,
+    hearing_decision: 2,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
@@ -618,7 +618,7 @@ export const PROVINCIAL_SCORES = {
   NU: {
     notice_termination: 4,
     dispute_period: 5,
-    hearing_decision: 4,
+    hearing_decision: 2,
     order_possession: 3,
     rent_control: 1,
     above_guideline: 1,
