@@ -72,10 +72,10 @@ export const INDICATORS = [
     shortName: "Dispute",
     description: "The amount of time a tenant has to dispute a notice of termination once received. Higher scores are given to provinces with mediation/investigation processes, longer dispute periods, clear processes, and multiple dispute options.",
     scoreDescriptions: {
-      1: "Extremely limited or unclear dispute process",
-      2: "Short dispute period with high burden on tenant",
-      3: "Moderate dispute period with accessible process",
-      4: "14+ days to dispute with clear, accessible process",
+      1: "Extremely limited/unclear dispute process",
+      2: "<10 days, high burden effort",
+      3: "10-13 days, accessible process",
+      4: "≥14 days, clear process, minimal barriers",
       5: "Rental officer investigates and seeks mediated solution prior to hearing"
     },
     rubricCriteria: {
@@ -104,38 +104,44 @@ export const INDICATORS = [
     id: "hearing_decision",
     name: "Hearing and Decision",
     shortName: "Hearing",
-    description: "The process through which disputes are heard and eviction decisions are made. Provinces are scored on cost, accessibility (modes of hearing), and timeliness of decisions.",
+    description: "The structure of the decision-making body that hears eviction disputes, including whether the forum is independent, how settlement is built into the process, who adjudicates cases, and how decisions are enforced.",
     scoreDescriptions: {
-      1: "Rare or no formal hearing; tenants have no ability to participate",
-      2: "Less accessible (1 mode), higher cost, procedural complexity for tenant",
-      3: "Less accessible (1 mode), moderate cost, procedural complexity for tenant",
-      4: "Accessible mode (at least 2 modes, moderate cost, minor barriers)",
-      5: "Free/low-cost, accessible (multiple modes of hearing), timely"
+      1: "Administrative body under provincial services with civil-servant adjudicators, optional or on-request mediation, and court enforcement",
+      2: "Administrative body under provincial services with some specialized training, optional mediation, and court enforcement",
+      3: "Administrative tribunal with mandatory pre-hearing settlement discussion and court-filed enforcement",
+      4: "Quasi-judicial administrative body with encouraged negotiation and court-filed enforcement",
+      5: "Independent administrative tribunal with required mediation, legally trained decision-makers, and decisions immediately equivalent to court judgments"
     },
     rubricCriteria: {
       5: {
-        cost: "Free or low-cost",
-        hearingAccess: "Multiple modes of hearing available",
-        timeliness: "Timely decisions"
+        tribunal: "Independent administrative tribunal",
+        mediation: "Required settlement/mediation prior to hearing",
+        decisionMakers: "Arbitrators typically trained as lawyers",
+        enforcement: "Decision immediately equivalent to court judgment"
       },
       4: {
-        hearingAccess: "At least 2 modes of hearing",
-        cost: "Moderate cost",
-        barriers: "Minor barriers"
+        tribunal: "Quasi-judicial administrative body",
+        mediation: "Facilitated negotiation encouraged prior to hearing",
+        decisionMakers: "Legal training not mandatory",
+        enforcement: "Filed with court for enforcement"
       },
       3: {
-        hearingAccess: "1 mode of hearing",
-        cost: "Moderate cost",
-        barriers: "Some procedural complexity for tenant"
+        tribunal: "Administrative tribunal",
+        mediation: "Mandatory pre-hearing settlement discussion",
+        decisionMakers: "Legal training not mandatory",
+        enforcement: "Filed with court for enforcement"
       },
       2: {
-        hearingAccess: "1 mode of hearing",
-        cost: "Higher cost",
-        barriers: "Procedural complexity for tenant"
+        tribunal: "Administrative body under provincial services",
+        decisionMakers: "Adjudicators typically civil servants with some specialized training",
+        mediation: "Optional mediation offered",
+        enforcement: "Decision enforceable through courts"
       },
       1: {
-        hearingAccess: "Rare or no formal hearing",
-        tenantParticipation: "Tenants have no ability to participate"
+        tribunal: "Administrative body under provincial services",
+        decisionMakers: "Adjudicators typically civil servants",
+        mediation: "Mediation available on request or optional",
+        enforcement: "Decision enforceable through courts"
       }
     }
   },
@@ -216,28 +222,28 @@ export const INDICATORS = [
     shortName: "AGI",
     description: "The rules governing when and how landlords can apply for rent increases exceeding the annual allowable guideline, including the evidentiary requirements, review process, and tenant participation rights.",
     scoreDescriptions: {
-      1: "Not applicable (no rent control)",
-      2: "No maximum on above guideline increases; no term limits",
-      3: "Some consideration but no term limits",
-      4: "Thorough and mandatory considerations; no term limits",
-      5: "Thorough and mandatory considerations; with term limits for AGIs"
+      1: "Not applicable",
+      2: "No maximum on above guideline increases, and no term",
+      3: "Some consideration but no term",
+      4: "Thorough and mandatory consideration, no term limit",
+      5: "Thorough and mandatory considerations, with term for AGIs"
     },
     rubricCriteria: {
       5: {
         considerations: "Thorough and mandatory considerations",
-        term: "Term limits for AGIs"
+        term: "With term for AGIs"
       },
       4: {
-        considerations: "Thorough and mandatory considerations",
-        term: "No term limits (no end date upon which the AGI expires)"
+        considerations: "Thorough and mandatory consideration",
+        term: "No term limit (i.e., no end date upon which the AGI expires)"
       },
       3: {
         considerations: "Some consideration",
-        term: "No term limits"
+        term: "No term"
       },
       2: {
         maximum: "No maximum on above guideline increases",
-        term: "No term limits"
+        term: "No term"
       },
       1: {
         status: "Not applicable"
